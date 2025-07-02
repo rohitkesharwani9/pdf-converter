@@ -34,11 +34,6 @@ app.use('/api', createProxyMiddleware({
   logLevel: 'debug'
 }));
 
-// Serve PDF worker file
-app.get('/pdf.worker.min.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'pdf.worker.min.js'));
-});
-
 // Serve static files from dist directory
 app.use(express.static(path.join(__dirname, 'dist')));
 

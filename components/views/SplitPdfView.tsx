@@ -3,9 +3,9 @@ import { ConversionTask, UploadedFile, ProcessedFile } from '../../types';
 import BaseConversionView from './BaseConversionView';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set up the worker with proper path handling
+// Set up the worker with CDN for better reliability
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `${window.location.origin}/pdf.worker.min.js`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 
 interface SplitPdfViewProps {
