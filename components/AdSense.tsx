@@ -11,14 +11,18 @@ const AdSense: React.FC<AdSenseProps> = ({ adSlot, adFormat = 'auto', className 
   const adRef = useRef<HTMLModElement>(null);
 
   useEffect(() => {
-    // Initialize AdSense when component mounts
-    if (adRef.current && (window as any).adsbygoogle) {
-      try {
-        (window as any).adsbygoogle.push({});
-      } catch (error) {
-        console.log('AdSense initialization error:', error);
+    // Add 2 second delay to ensure page is fully loaded before loading ads
+    const timer = setTimeout(() => {
+      if (adRef.current && (window as any).adsbygoogle) {
+        try {
+          (window as any).adsbygoogle.push({});
+        } catch (error) {
+          console.log('AdSense initialization error:', error);
+        }
       }
-    }
+    }, 2000); // 2 second delay
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
