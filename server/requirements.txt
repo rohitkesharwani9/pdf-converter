@@ -1,0 +1,12 @@
+gradio
+python-docx
+pdf2docx
+fpdf2
+pdfplumber==0.10.3
+pandas==2.1.4
+openpyxl==3.1.2
+pdf2image==1.17.0
+python-pptx==0.6.23
+Pillow==10.1.0
+pytesseract==0.3.10
+PyMuPDF==1.23.8

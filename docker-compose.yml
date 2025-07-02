@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5174:5173"  # Using port 5174 instead of 5173
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://backend:5002
+    depends_on:
+      - backend
+    networks:
+      - pdf-suite-network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5002:5002"  # Using port 5002 instead of 5001
+    environment:
+      - NODE_ENV=production
+      - PORT=5002
+    volumes:
+      - ./server/uploads:/app/uploads
+      - ./server/temp:/app/temp
+      - ./server/temp_pdf:/app/temp_pdf
+    networks:
+      - pdf-suite-network
+
+networks:
+  pdf-suite-network:
+    driver: bridge 
