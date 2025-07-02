@@ -18,6 +18,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+# Verify tesseract installation and ensure language data is available
+RUN tesseract --version && \
+    ls -la /usr/share/tessdata/ && \
+    echo "Tesseract installation verified"
+
+# Download English language data directly from GitHub
+RUN apt-get update && \
+    apt-get install -y wget && \
+    mkdir -p /usr/share/tessdata && \
+    wget -O /usr/share/tessdata/eng.traineddata https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata && \
+    apt-get remove -y wget && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    echo "English language data downloaded successfully" && \
+    ls -la /usr/share/tessdata/
+
 # Set working directory
 WORKDIR /app
 

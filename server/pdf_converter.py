@@ -1995,6 +1995,28 @@ def ocr_pdf(input_path, output_path, options=None):
         # In Docker container, tesseract is installed in the default location
         os.environ['TESSDATA_PREFIX'] = '/usr/share/tessdata'
         
+        # Debug: Check if tesseract and language data are available
+        import subprocess
+        try:
+            # Check tesseract version
+            result = subprocess.run(['tesseract', '--version'], capture_output=True, text=True, timeout=10)
+            print(f"Tesseract version: {result.stdout.split()[1] if result.stdout else 'Unknown'}")
+            
+            # Check if language data exists
+            if os.path.exists('/usr/share/tessdata/eng.traineddata'):
+                print("English language data found at /usr/share/tessdata/eng.traineddata")
+            else:
+                print("WARNING: English language data not found at /usr/share/tessdata/eng.traineddata")
+                # List what's in the tessdata directory
+                if os.path.exists('/usr/share/tessdata'):
+                    files = os.listdir('/usr/share/tessdata')
+                    print(f"Files in /usr/share/tessdata: {files}")
+                else:
+                    print("TESSDATA directory does not exist")
+                    
+        except Exception as e:
+            print(f"Error checking tesseract installation: {e}")
+        
         print(f"Starting OCR processing of {input_path}")
         
         if options is None:
@@ -2031,10 +2053,36 @@ def ocr_pdf(input_path, output_path, options=None):
             
             # Perform OCR with optimized configuration
             ocr_config = f'--oem 3 --psm 6 -l {language}'
-            ocr_config += f' --tessdata-dir /usr/share/tessdata'
+            
+            # Check if language data exists and set tessdata directory accordingly
+            tessdata_dir = '/usr/share/tessdata'
+            if not os.path.exists(f'{tessdata_dir}/{language}.traineddata'):
+                print(f"Warning: {language}.traineddata not found in {tessdata_dir}")
+                # Try alternative locations
+                alternative_dirs = ['/usr/local/share/tessdata', '/opt/tesseract/share/tessdata']
+                for alt_dir in alternative_dirs:
+                    if os.path.exists(f'{alt_dir}/{language}.traineddata'):
+                        tessdata_dir = alt_dir
+                        print(f"Found language data in {alt_dir}")
+                        break
+                else:
+                    print("Warning: Language data not found in any standard location")
+                    # Try without specifying tessdata directory
+                    tessdata_dir = None
+            
+            if tessdata_dir:
+                ocr_config += f' --tessdata-dir {tessdata_dir}'
+            
+            print(f"Using OCR config: {ocr_config}")
             
             # Get OCR data with positioning
-            ocr_data = pytesseract.image_to_data(enhanced_image, config=ocr_config, output_type=pytesseract.Output.DICT)
+            try:
+                ocr_data = pytesseract.image_to_data(enhanced_image, config=ocr_config, output_type=pytesseract.Output.DICT)
+            except Exception as ocr_error:
+                print(f"OCR error with config '{ocr_config}': {ocr_error}")
+                # Try with simpler config
+                print("Trying with simpler OCR config...")
+                ocr_data = pytesseract.image_to_data(enhanced_image, lang=language, output_type=pytesseract.Output.DICT)
             
             # Create new page with same dimensions as original
             page = doc.new_page(width=image.width, height=image.height)
