@@ -11,9 +11,11 @@ services:
       - NODE_ENV=production
       - VITE_API_URL=http://backend:5001
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - pdf-suite-network
+    restart: unless-stopped
 
   backend:
     build:
@@ -31,6 +33,13 @@ services:
       - ./server/temp_pdf:/app/temp_pdf
     networks:
       - pdf-suite-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   pdf-suite-network:
