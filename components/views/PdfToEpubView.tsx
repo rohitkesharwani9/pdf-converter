@@ -61,7 +61,7 @@ const PdfToEpubView: React.FC<PdfToEpubViewProps> = ({ task }) => {
     }
     
     try {
-      const response = await fetch('http://localhost:5001/convert/pdf-to-epub', {
+      const response = await fetch('/convert/pdf-to-epub', {
         method: 'POST',
         body: formData,
       });

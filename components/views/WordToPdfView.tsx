@@ -26,7 +26,7 @@ const WordToPdfView: React.FC<WordToPdfViewProps> = ({ task }) => {
       let pdfBlob: Blob | null = null;
       let pdfSize = 0;
       try {
-        const response = await fetch('http://localhost:5001/convert/word-to-pdf', {
+        const response = await fetch('/convert/word-to-pdf', {
           method: 'POST',
           body: formData,
         });

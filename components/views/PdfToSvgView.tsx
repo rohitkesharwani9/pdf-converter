@@ -95,7 +95,7 @@ const PdfToSvgView: React.FC<PdfToSvgViewProps> = ({ task }) => {
     });
     
     try {
-      const response = await fetch('http://localhost:5001/convert/pdf-to-svg', {
+      const response = await fetch('/convert/pdf-to-svg', {
         method: 'POST',
         body: formData,
       });

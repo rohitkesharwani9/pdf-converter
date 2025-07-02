@@ -95,7 +95,7 @@ const PdfToRtfView: React.FC<PdfToRtfViewProps> = ({ task }) => {
     });
     
     try {
-      const response = await fetch('http://localhost:5001/convert/pdf-to-rtf', {
+      const response = await fetch('/convert/pdf-to-rtf', {
         method: 'POST',
         body: formData,
       });

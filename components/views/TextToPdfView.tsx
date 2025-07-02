@@ -43,7 +43,7 @@ const TextToPdfView: React.FC<TextToPdfViewProps> = ({ task }) => {
       let pdfBlob: Blob | null = null;
       let pdfSize = 0;
       try {
-        const response = await fetch('http://localhost:5001/convert/text-to-pdf', {
+        const response = await fetch('/convert/text-to-pdf', {
           method: 'POST',
           body: formData,
         });
@@ -119,7 +119,7 @@ const TextToPdfView: React.FC<TextToPdfViewProps> = ({ task }) => {
       const formData = new FormData();
       formData.append('file', textFile);
       
-      const response = await fetch('http://localhost:5001/convert/text-to-pdf', {
+      const response = await fetch('/convert/text-to-pdf', {
         method: 'POST',
         body: formData,
       });

@@ -26,7 +26,7 @@ const VectorToPdfView: React.FC<VectorToPdfViewProps> = ({ task }) => {
     let pdfBlob: Blob | null = null;
     let pdfSize = 0;
     try {
-      const response = await fetch('http://localhost:5001/convert/vector-to-pdf', {
+      const response = await fetch('/convert/vector-to-pdf', {
         method: 'POST',
         body: formData,
       });

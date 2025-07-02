@@ -68,7 +68,7 @@ const MergePdfView: React.FC<MergePdfViewProps> = ({ task }) => {
       formData.append('files', uploadedFile.file, uploadedFile.file.name);
     });
 
-    const response = await fetch('http://localhost:5001/convert/merge-pdf', {
+    const response = await fetch('/convert/merge-pdf', {
       method: 'POST',
       body: formData,
     });

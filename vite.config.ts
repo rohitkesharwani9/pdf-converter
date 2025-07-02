@@ -26,6 +26,20 @@ export default defineConfig(({ mode }) => {
             secure: false
           }
         }
+      },
+      preview: {
+        proxy: {
+          '/convert': {
+            target: 'http://backend:5001',
+            changeOrigin: true,
+            secure: false
+          },
+          '/api': {
+            target: 'http://backend:5001',
+            changeOrigin: true,
+            secure: false
+          }
+        }
       }
     };
 });

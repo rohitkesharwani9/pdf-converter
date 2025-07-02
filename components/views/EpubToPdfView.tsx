@@ -26,7 +26,7 @@ const EpubToPdfView: React.FC<EpubToPdfViewProps> = ({ task }) => {
     let pdfBlob: Blob | null = null;
     let pdfSize = 0;
     try {
-      const response = await fetch('http://localhost:5001/convert/epub-to-pdf', {
+      const response = await fetch('/convert/epub-to-pdf', {
         method: 'POST',
         body: formData,
       });

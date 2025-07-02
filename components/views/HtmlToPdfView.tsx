@@ -251,7 +251,7 @@ const HtmlToPdfView: React.FC<HtmlToPdfViewProps> = ({ task }) => {
     }, 200);
 
     try {
-      const response = await fetch('http://localhost:5001/convert/html-to-pdf', {
+      const response = await fetch('/convert/html-to-pdf', {
         method: 'POST',
         body: formData,
       });

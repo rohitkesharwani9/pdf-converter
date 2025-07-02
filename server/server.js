@@ -16,7 +16,13 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 5001;
 
-app.use(cors());
+// Configure CORS for production and development
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || ['http://localhost:5173', 'http://frontend:5173'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -2601,8 +2607,19 @@ async function performOcrConversion(inputPath, outputPath, options) {
     });
 }
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    port: port,
+    cors_origin: process.env.CORS_ORIGIN || 'default'
+  });
+});
+
 app.listen(port, () => {
-  console.log(`Word to PDF backend running on http://localhost:${port}`);
+  console.log(`PDF Converter backend running on http://localhost:${port}`);
+  console.log(`CORS origin: ${process.env.CORS_ORIGIN || 'default'}`);
 }); 
 
 async function organizePdfPages(inputPath, outputPath, pageOperations) {

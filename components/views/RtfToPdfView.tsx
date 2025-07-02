@@ -26,7 +26,7 @@ const RtfToPdfView: React.FC<RtfToPdfViewProps> = ({ task }) => {
     let pdfBlob: Blob | null = null;
     let pdfSize = 0;
     try {
-      const response = await fetch('http://localhost:5001/convert/rtf-to-pdf', {
+      const response = await fetch('/convert/rtf-to-pdf', {
         method: 'POST',
         body: formData,
       });

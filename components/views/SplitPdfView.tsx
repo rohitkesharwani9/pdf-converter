@@ -37,7 +37,7 @@ const SplitPdfView: React.FC<SplitPdfViewProps> = ({ task }) => {
     formData.append('file', file.file);
     formData.append('options', JSON.stringify(options));
 
-    const response = await fetch('http://localhost:5001/convert/split-pdf', {
+    const response = await fetch('/convert/split-pdf', {
       method: 'POST',
       body: formData,
     });
