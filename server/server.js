@@ -316,7 +316,7 @@ app.post('/convert/epub-to-pdf', upload.single('file'), async (req, res) => {
 
     console.log('[EPUB2PDF] Starting Calibre conversion...');
     execFile(
-      '/Applications/calibre.app/Contents/MacOS/ebook-convert',
+      'ebook-convert',
       [renamedInputPath, outputPdf],
       async (error, stdout, stderr) => {
         try {
