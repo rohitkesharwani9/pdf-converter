@@ -1083,8 +1083,8 @@ const convertPdfToEpub = async (filePath, res, originalName = 'document.pdf', op
     // Prepare options for Python script
     const optionsArg = JSON.stringify(options);
     
-    // Call Python script with virtual environment (isolated for EPUB only)
-    const pythonProcess = spawn(path.join(__dirname, 'pdf_converter_env', 'bin', 'python3'), [
+    // Call Python script with system Python
+    const pythonProcess = spawn('python3', [
       path.join(__dirname, 'pdf_converter.py'),
       'pdf-to-epub',
       absoluteInputPath,
@@ -1092,8 +1092,7 @@ const convertPdfToEpub = async (filePath, res, originalName = 'document.pdf', op
       '--options',
       optionsArg
     ], {
-      cwd: __dirname,
-      env: { ...process.env, PYTHONPATH: path.join(__dirname, 'pdf_converter_env', 'lib', 'python3.13', 'site-packages') }
+      cwd: __dirname
     });
     
     let stdout = '';
