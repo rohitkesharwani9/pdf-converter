@@ -2574,6 +2574,69 @@ app.post('/convert/reorder-pages-pdf', upload.single('file'), async (req, res) =
   }
 });
 
+app.post('/convert/ocr-pdf', upload.single('file'), async (req, res) => {
+  console.log('[OCR_PDF] Received OCR request');
+  
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  
+  if (path.extname(req.file.originalname).toLowerCase() !== '.pdf') {
+    await fs.unlink(req.file.path);
+    return res.status(400).json({ error: 'Only PDF files are supported for this operation.' });
+  }
+  
+  console.log('[OCR_PDF] File received:', req.file.originalname);
+  console.log('[OCR_PDF] File path:', req.file.path);
+  
+  // Get options from request body
+  const options = {
+    language: req.body.language || 'eng',
+    confidence: parseFloat(req.body.confidence) || 0.7,
+    preserve_layout: req.body.preserve_layout === 'true',
+    extract_images: req.body.extract_images === 'true'
+  };
+  console.log('[OCR_PDF] Options:', options);
+  
+  try {
+    // Create a stable copy of the uploaded file
+    const stableFilePath = await createStableFileCopy(req.file.path, req.file.originalname);
+    console.log('[OCR_PDF] Stable file path:', stableFilePath);
+    
+    const outputFileName = `ocr_${path.basename(req.file.originalname, '.pdf')}_${Date.now()}.pdf`;
+    const outputPath = path.join(__dirname, 'temp_pdf', outputFileName);
+    
+    const result = await performOcrConversion(stableFilePath, outputPath, options);
+    
+    if (result.success) {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${outputFileName}"`);
+      const fileStream = fsOrig.createReadStream(outputPath);
+      fileStream.pipe(res);
+      fileStream.on('close', () => {
+        fs.unlink(outputPath).catch(e => console.error('Failed to delete output file:', e));
+      });
+    } else {
+      res.status(400).json({ error: result.error });
+    }
+    
+    // Clean up the stable copy
+    await fs.unlink(stableFilePath);
+    console.log('[OCR_PDF] Cleaned up stable file copy');
+    
+  } catch (error) {
+    console.error('[OCR_PDF] OCR error:', error);
+    res.status(500).json({ 
+      error: 'PDF OCR failed', 
+      details: error.message 
+    });
+  } finally {
+    // Clean up the original uploaded file
+    await fs.unlink(req.file.path).catch(err => console.error("[OCR_PDF] Failed to delete uploaded file:", err));
+    console.log('[OCR_PDF] Cleaned up uploaded file');
+  }
+});
+
 app.post('/api/organize-pdf', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
@@ -2695,7 +2758,7 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 async function performOcrConversion(inputPath, outputPath, options) {
     return new Promise((resolve) => {
         const optionsJson = JSON.stringify(options || {});
-        const pythonProcess = spawn('python', ['pdf_converter.py', 'ocr-pdf', inputPath, outputPath, '--options', optionsJson], {
+        const pythonProcess = spawn('python3', ['pdf_converter.py', 'ocr-pdf', inputPath, outputPath, '--options', optionsJson], {
             timeout: 300000 // 5 minutes timeout for OCR
         });
         
@@ -2749,7 +2812,7 @@ app.listen(port, () => {
 
 async function organizePdfPages(inputPath, outputPath, pageOperations) {
     return new Promise((resolve) => {
-        const pythonProcess = spawn('python', ['pdf_converter.py', 'organize_pdf', inputPath, outputPath], {
+        const pythonProcess = spawn('python3', ['pdf_converter.py', 'organize_pdf', inputPath, outputPath], {
             timeout: 240000 // 4 minutes timeout
         });
         
@@ -2794,7 +2857,7 @@ async function organizePdfPages(inputPath, outputPath, pageOperations) {
 
 async function getPdfPageCount(inputPath) {
     return new Promise((resolve) => {
-        const pythonProcess = spawn('python', ['pdf_converter.py', 'get_page_count', inputPath], {
+        const pythonProcess = spawn('python3', ['pdf_converter.py', 'get_page_count', inputPath], {
             timeout: 60000 // 1 minute timeout for page count
         });
         
