@@ -3,7 +3,7 @@ import { ConversionTask, UploadedFile, ProcessedFile } from '../../types';
 import BaseConversionView from './BaseConversionView';
 import * as pdfjsLib from 'pdfjs-dist';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
 
 interface PdfToSvgViewProps {
   task: ConversionTask;

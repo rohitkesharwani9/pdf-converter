@@ -3,9 +3,9 @@ import { ConversionTask, UploadedFile, ProcessedFile } from '../../types';
 import BaseConversionView from './BaseConversionView';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set up the worker with local file to avoid CORS issues
+// Set up the worker - use jsDelivr CDN to avoid CORS issues
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
 }
 
 interface SplitPdfViewProps {
