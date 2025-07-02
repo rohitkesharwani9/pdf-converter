@@ -142,7 +142,7 @@ const convertWithLibreOffice = (filePath, res, originalName = 'document.html') =
   const ext = path.extname(originalName);
 
   execFile(
-    '/Applications/LibreOffice.app/Contents/MacOS/soffice',
+    'libreoffice',
     ['--headless', '--convert-to', 'pdf', '--outdir', outputDir, filePath],
     async (error, stdout, stderr) => {
       try {
