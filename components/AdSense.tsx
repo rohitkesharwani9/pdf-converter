@@ -67,7 +67,7 @@ const AdSense: React.FC<AdSenseProps> = ({ adSlot, adFormat = 'auto', className 
         minHeight: '250px',
         width: '100%',
         maxWidth: '728px',
-        margin: '0 auto',
+        margin: '10px auto 0 auto',
         ...style
       }}
     >
