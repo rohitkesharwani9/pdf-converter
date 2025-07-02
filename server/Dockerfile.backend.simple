@@ -20,10 +20,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Verify tesseract installation and ensure language data is available
 RUN tesseract --version && \
-    ls -la /usr/share/tessdata/ && \
     echo "Tesseract installation verified"
 
-# Download English language data directly from GitHub
+# Create tessdata directory and download English language data
 RUN apt-get update && \
     apt-get install -y wget && \
     mkdir -p /usr/share/tessdata && \
