@@ -8,8 +8,8 @@ import ProgressBar from '../ProgressBar';
 import { Download, AlertTriangle, CheckCircle, Trash2, Eye, X } from 'lucide-react';
 import AdSense from '../AdSense';
 
-// Initialize PDF.js worker - use jsDelivr CDN to avoid CORS issues
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+// Initialize PDF.js worker - use local worker file
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 interface PdfToImageViewProps {
   task: ConversionTask;

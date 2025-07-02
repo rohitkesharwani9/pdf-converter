@@ -36,8 +36,8 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import AdSense from '../AdSense';
 
-// Set up PDF.js worker - use jsDelivr CDN to avoid CORS issues
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 interface TableInfo {
   page: number;
