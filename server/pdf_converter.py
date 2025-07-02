@@ -1991,8 +1991,9 @@ def ocr_pdf(input_path, output_path, options=None):
         import json
         import os
         
-        # Set TESSDATA_PREFIX environment variable for Homebrew installation
-        os.environ['TESSDATA_PREFIX'] = '/opt/homebrew/share/tessdata'
+        # Set TESSDATA_PREFIX environment variable for Linux installation
+        # In Docker container, tesseract is installed in the default location
+        os.environ['TESSDATA_PREFIX'] = '/usr/share/tessdata'
         
         print(f"Starting OCR processing of {input_path}")
         
@@ -2030,7 +2031,7 @@ def ocr_pdf(input_path, output_path, options=None):
             
             # Perform OCR with optimized configuration
             ocr_config = f'--oem 3 --psm 6 -l {language}'
-            ocr_config += f' --tessdata-dir /opt/homebrew/share/tessdata'
+            ocr_config += f' --tessdata-dir /usr/share/tessdata'
             
             # Get OCR data with positioning
             ocr_data = pytesseract.image_to_data(enhanced_image, config=ocr_config, output_type=pytesseract.Output.DICT)
