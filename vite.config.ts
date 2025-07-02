@@ -13,15 +13,6 @@ export default defineConfig(({ mode }) => {
           '@': path.resolve(__dirname, '.'),
         }
       },
-      build: {
-        rollupOptions: {
-          output: {
-            manualChunks: undefined
-          }
-        },
-        target: 'es2015',
-        minify: 'terser'
-      },
       server: {
         proxy: {
           '/convert': {
