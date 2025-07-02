@@ -19,19 +19,23 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Proxy API calls to backend
+// Proxy API calls to backend with extended timeouts
 app.use('/convert', createProxyMiddleware({
   target: 'http://backend:5001',
   changeOrigin: true,
   secure: false,
-  logLevel: 'debug'
+  logLevel: 'debug',
+  timeout: 300000, // 5 minutes
+  proxyTimeout: 300000 // 5 minutes
 }));
 
 app.use('/api', createProxyMiddleware({
   target: 'http://backend:5001',
   changeOrigin: true,
   secure: false,
-  logLevel: 'debug'
+  logLevel: 'debug',
+  timeout: 300000, // 5 minutes
+  proxyTimeout: 300000 // 5 minutes
 }));
 
 // Serve static files from dist directory

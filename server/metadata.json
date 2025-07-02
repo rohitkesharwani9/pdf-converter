@@ -1,6 +1,0 @@
-{
-  "name": "OmniConverter PDF Suite",
-  "description": "A comprehensive web application for converting files to and from PDF format, along with powerful PDF editing tools. All operations are simulated for demonstration purposes and do not involve actual file processing or external API calls for conversion.",
-  "requestFramePermissions": [],
-  "prompt": ""
-}
