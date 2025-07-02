@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+uploads/*
+temp/*
+temp_pdf/*
+*.log
+.DS_Store
+.env 
