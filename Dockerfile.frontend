@@ -1,5 +1,5 @@
 # Use Ubuntu base for better compatibility
-FROM node:18-bullseye
+FROM node:20-bullseye
 
 # Set working directory
 WORKDIR /app
@@ -7,14 +7,17 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
 
 # Build the application
 RUN npm run build
+
+# Remove dev dependencies to keep image lean
+RUN npm prune --production
 
 # Install serve to run the built application
 RUN npm install -g serve

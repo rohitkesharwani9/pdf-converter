@@ -1,5 +1,5 @@
 # Use Ubuntu base for better package compatibility
-FROM node:18-bullseye
+FROM node:20-bullseye
 
 # Set working directory
 WORKDIR /app
