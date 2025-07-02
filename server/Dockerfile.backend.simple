@@ -2,10 +2,15 @@
 FROM node:20-bullseye
 
 # Install curl for healthcheck and LibreOffice for document conversion
-RUN apt-get update && apt-get install -y \
+# Using --no-install-recommends to avoid unnecessary packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
-    libreoffice \
-    && rm -rf /var/lib/apt/lists/*
+    libreoffice-writer \
+    libreoffice-calc \
+    libreoffice-impress \
+    libreoffice-draw \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Set working directory
 WORKDIR /app
