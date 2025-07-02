@@ -18,7 +18,7 @@ The application uses the following ports to avoid conflicts:
 ### 1. Repository Setup
 1. Push your code to a Git repository (GitHub, GitLab, etc.)
 2. Ensure all files are committed including:
-   - `docker-compose.yml`
+   - `docker-compose.yaml`
    - `Dockerfile.frontend`
    - `server/Dockerfile.backend`
    - `.dockerignore` files
@@ -27,7 +27,7 @@ The application uses the following ports to avoid conflicts:
 1. **Create New Application** in Coolify
 2. **Source**: Select your Git repository
 3. **Build Pack**: Choose "Docker Compose"
-4. **Docker Compose File**: `docker-compose.yml`
+4. **Docker Compose File**: `docker-compose.yaml`
 
 ### 3. Environment Variables (Optional)
 You can set these environment variables in Coolify:

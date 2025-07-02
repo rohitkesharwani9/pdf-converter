@@ -11,7 +11,7 @@ fi
 
 # Build and start the services
 echo "📦 Building and starting services..."
-docker-compose up --build -d
+docker compose up --build -d
 
 # Wait for services to be ready
 echo "⏳ Waiting for services to be ready..."
@@ -19,13 +19,13 @@ sleep 10
 
 # Check service status
 echo "🔍 Checking service status..."
-docker-compose ps
+docker compose ps
 
 echo "✅ Deployment complete!"
 echo "🌐 Frontend: http://localhost:5174"
 echo "🔧 Backend API: http://localhost:5002"
 echo ""
 echo "📋 Useful commands:"
-echo "  View logs: docker-compose logs -f"
-echo "  Stop services: docker-compose down"
-echo "  Restart services: docker-compose restart" 
+echo "  View logs: docker compose logs -f"
+echo "  Stop services: docker compose down"
+echo "  Restart services: docker compose restart" 
