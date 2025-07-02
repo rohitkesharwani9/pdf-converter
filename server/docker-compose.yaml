@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"  # Changed to port 5173 for frontend
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://backend:5001
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - pdf-suite-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.backend.simple
+    ports:
+      - "5001:5001"  # Changed to port 5001 for backend
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - CORS_ORIGIN=http://localhost:5173
+    volumes:
+      - ./server/uploads:/app/uploads
+      - ./server/temp:/app/temp
+      - ./server/temp_pdf:/app/temp_pdf
+    networks:
+      - pdf-suite-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  pdf-suite-network:
+    driver: bridge 

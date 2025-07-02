@@ -1505,24 +1505,42 @@ def merge_pdfs(output_path, input_paths):
     Merges multiple PDF files into a single PDF.
     """
     try:
-        from PyPDF2 import PdfMerger
+        import signal
         
-        merger = PdfMerger()
+        # Set up timeout handler
+        def timeout_handler(signum, frame):
+            raise TimeoutError("PDF merge operation timed out")
         
-        print(f"Starting merge process for {len(input_paths)} files.")
-        for pdf_path in input_paths:
-            if os.path.exists(pdf_path):
-                print(f"Appending file: {pdf_path}")
-                merger.append(pdf_path)
-            else:
-                print(f"Warning: File not found and skipped: {pdf_path}")
+        # Set timeout for 4 minutes
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(240)  # 4 minutes
         
-        # Write out the merged PDF
-        merger.write(output_path)
-        merger.close()
-        
-        print(f"Successfully merged {len(input_paths)} files into {output_path}")
-        return True
+        try:
+            from PyPDF2 import PdfMerger
+            
+            merger = PdfMerger()
+            
+            print(f"Starting merge process for {len(input_paths)} files.")
+            for pdf_path in input_paths:
+                if os.path.exists(pdf_path):
+                    print(f"Appending file: {pdf_path}")
+                    merger.append(pdf_path)
+                else:
+                    print(f"Warning: File not found and skipped: {pdf_path}")
+            
+            # Write out the merged PDF
+            merger.write(output_path)
+            merger.close()
+            
+            print(f"Successfully merged {len(input_paths)} files into {output_path}")
+            return True
+        finally:
+            # Cancel the alarm
+            signal.alarm(0)
+            
+    except TimeoutError as e:
+        print(f"PDF merge operation timed out: {str(e)}")
+        return False
     except Exception as e:
         print(f"Error in merge_pdfs: {str(e)}")
         import traceback
@@ -1535,85 +1553,102 @@ def split_pdf(input_path, output_zip_path, options=None):
     The output is a ZIP file containing the split PDFs.
     """
     try:
-        import PyPDF2
-        import zipfile
-        import tempfile
-        import re
-
-        if options is None:
-            options = {}
+        import signal
         
-        split_mode = options.get('split_mode', 'ranges')
-        page_ranges_str = options.get('page_ranges', '')
-
-        pdf_reader = PyPDF2.PdfReader(input_path)
-        total_pages = len(pdf_reader.pages)
+        # Set up timeout handler
+        def timeout_handler(signum, frame):
+            raise TimeoutError("PDF split operation timed out")
         
-        # Create a temporary directory to store the split PDF files before zipping
-        with tempfile.TemporaryDirectory() as temp_dir:
-            split_file_paths = []
+        # Set timeout for 4 minutes
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(240)  # 4 minutes
+        
+        try:
+            import PyPDF2
+            import zipfile
+            import tempfile
+            import re
 
-            if split_mode == 'all':
-                # Split every page into a separate file
-                for i in range(total_pages):
-                    pdf_writer = PyPDF2.PdfWriter()
-                    pdf_writer.add_page(pdf_reader.pages[i])
-                    output_filename = os.path.join(temp_dir, f'page_{i + 1}.pdf')
-                    with open(output_filename, 'wb') as out_f:
-                        pdf_writer.write(out_f)
-                    split_file_paths.append(output_filename)
-                print(f"Split PDF into {total_pages} separate pages.")
+            if options is None:
+                options = {}
+            
+            split_mode = options.get('split_mode', 'ranges')
+            page_ranges_str = options.get('page_ranges', '')
 
-            elif split_mode == 'ranges':
-                # Split by custom page ranges
-                if not page_ranges_str:
-                    raise ValueError("Page ranges are required for 'ranges' split mode.")
-                
-                range_groups = page_ranges_str.split(',')
-                for i, group in enumerate(range_groups):
-                    group = group.strip()
-                    pdf_writer = PyPDF2.PdfWriter()
+            pdf_reader = PyPDF2.PdfReader(input_path)
+            total_pages = len(pdf_reader.pages)
+            
+            # Create a temporary directory to store the split PDF files before zipping
+            with tempfile.TemporaryDirectory() as temp_dir:
+                split_file_paths = []
+
+                if split_mode == 'all':
+                    # Split every page into a separate file
+                    for i in range(total_pages):
+                        pdf_writer = PyPDF2.PdfWriter()
+                        pdf_writer.add_page(pdf_reader.pages[i])
+                        output_filename = os.path.join(temp_dir, f'page_{i + 1}.pdf')
+                        with open(output_filename, 'wb') as out_f:
+                            pdf_writer.write(out_f)
+                        split_file_paths.append(output_filename)
+                    print(f"Split PDF into {total_pages} separate pages.")
+
+                elif split_mode == 'ranges':
+                    # Split by custom page ranges
+                    if not page_ranges_str:
+                        raise ValueError("Page ranges are required for 'ranges' split mode.")
                     
-                    # Parse individual pages and ranges (e.g., "1-3" or "5")
-                    pages_in_group = set()
-                    parts = re.split(r'[-–]', group) # Handles hyphen and en-dash
-                    if len(parts) == 1:
-                        page_num = int(parts[0])
-                        if 1 <= page_num <= total_pages:
-                            pages_in_group.add(page_num)
-                    elif len(parts) == 2:
-                        start, end = int(parts[0]), int(parts[1])
-                        for page_num in range(start, end + 1):
+                    range_groups = page_ranges_str.split(',')
+                    for i, group in enumerate(range_groups):
+                        group = group.strip()
+                        pdf_writer = PyPDF2.PdfWriter()
+                        
+                        # Parse individual pages and ranges (e.g., "1-3" or "5")
+                        pages_in_group = set()
+                        parts = re.split(r'[-–]', group) # Handles hyphen and en-dash
+                        if len(parts) == 1:
+                            page_num = int(parts[0])
                             if 1 <= page_num <= total_pages:
                                 pages_in_group.add(page_num)
+                        elif len(parts) == 2:
+                            start, end = int(parts[0]), int(parts[1])
+                            for page_num in range(start, end + 1):
+                                if 1 <= page_num <= total_pages:
+                                    pages_in_group.add(page_num)
 
-                    if not pages_in_group:
-                        continue # Skip empty or invalid groups
+                        if not pages_in_group:
+                            continue # Skip empty or invalid groups
 
-                    # Add sorted pages to the writer
-                    for page_num in sorted(list(pages_in_group)):
-                        pdf_writer.add_page(pdf_reader.pages[page_num - 1])
-                    
-                    output_filename = os.path.join(temp_dir, f'split_group_{i + 1}.pdf')
-                    with open(output_filename, 'wb') as out_f:
-                        pdf_writer.write(out_f)
-                    split_file_paths.append(output_filename)
-                print(f"Split PDF into {len(split_file_paths)} files based on ranges.")
+                        # Add sorted pages to the writer
+                        for page_num in sorted(list(pages_in_group)):
+                            pdf_writer.add_page(pdf_reader.pages[page_num - 1])
+                        
+                        output_filename = os.path.join(temp_dir, f'split_group_{i + 1}.pdf')
+                        with open(output_filename, 'wb') as out_f:
+                            pdf_writer.write(out_f)
+                        split_file_paths.append(output_filename)
+                    print(f"Split PDF into {len(split_file_paths)} files based on ranges.")
 
-            else:
-                raise ValueError(f"Unsupported split mode: {split_mode}")
+                else:
+                    raise ValueError(f"Unsupported split mode: {split_mode}")
 
-            # Zip the created PDF files
-            if split_file_paths:
-                with zipfile.ZipFile(output_zip_path, 'w') as zipf:
-                    for file_path in split_file_paths:
-                        zipf.write(file_path, os.path.basename(file_path))
-                print(f"Created ZIP file with split PDFs at: {output_zip_path}")
-            else:
-                raise ValueError("No valid pages were selected for splitting.")
+                # Zip the created PDF files
+                if split_file_paths:
+                    with zipfile.ZipFile(output_zip_path, 'w') as zipf:
+                        for file_path in split_file_paths:
+                            zipf.write(file_path, os.path.basename(file_path))
+                    print(f"Created ZIP file with split PDFs at: {output_zip_path}")
+                else:
+                    raise ValueError("No valid pages were selected for splitting.")
 
-        return True
-
+            return True
+        finally:
+            # Cancel the alarm
+            signal.alarm(0)
+            
+    except TimeoutError as e:
+        print(f"PDF split operation timed out: {str(e)}")
+        return False
     except Exception as e:
         print(f"Error in split_pdf: {str(e)}")
         import traceback
@@ -1664,8 +1699,8 @@ def compress_pdf(input_path, output_path, options=None):
         
         print(f"Ghostscript command: {' '.join(gs_command)}")
         
-        # Execute Ghostscript
-        result = subprocess.run(gs_command, capture_output=True, text=True, check=True)
+        # Execute Ghostscript with timeout
+        result = subprocess.run(gs_command, capture_output=True, text=True, check=True, timeout=180)  # 3 minutes timeout
         
         print(f"Ghostscript stdout: {result.stdout}")
         if result.stderr:
@@ -1692,6 +1727,10 @@ def compress_pdf(input_path, output_path, options=None):
         print(f"Return code: {e.returncode}")
         print(f"stdout: {e.stdout}")
         print(f"stderr: {e.stderr}")
+        return False
+    except subprocess.TimeoutExpired as e:
+        print(f"Ghostscript timeout: {e}")
+        print(f"Command timed out after {e.timeout} seconds")
         return False
     except FileNotFoundError:
         print("Error: Ghostscript not found. Please install it:")

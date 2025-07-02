@@ -1,22 +1,153 @@
-# PDF Conversion Server Setup Guide
+# 📄 OmniConverter PDF Suite - Super Easy Setup!
 
-This server provides PDF conversion capabilities using LibreOffice in headless mode for various file formats including Word, Excel, and PowerPoint documents. It also supports converting PDFs to other formats using Python libraries including RTF, EPUB, HTML, and Text formats.
+Turn your files into PDFs! Convert Word documents, Excel spreadsheets, PowerPoint presentations, text files, and pictures to PDF format. Also convert PDFs to Word, Excel, PowerPoint, and more!
 
-## Prerequisites
+## 🎯 What This App Does
 
-- Node.js (v14 or higher)
-- LibreOffice installed on your system
-- Python 3.7+ (for PDF to Word, Excel, PowerPoint, RTF, EPUB, HTML, Text conversions)
-- pip (Python package manager)
-- Tesseract OCR (for OCR-based conversions)
-- Poppler-utils (for image-based conversions)
-- **Ghostscript** (for PDF compression feature)
+- **Word to PDF** - Turn your .doc or .docx files into PDFs
+- **Excel to PDF** - Turn your .xls or .xlsx files into PDFs  
+- **PowerPoint to PDF** - Turn your .ppt or .pptx files into PDFs
+- **Text to PDF** - Turn your .txt files into PDFs
+- **Image to PDF** - Turn your pictures (JPG, PNG, GIF) into PDFs
+- **PDF to Word** - Convert PDFs back to editable Word documents
+- **PDF to Excel** - Extract tables from PDFs to Excel spreadsheets
+- **PDF to PowerPoint** - Convert PDFs to PowerPoint presentations
+- **PDF to Image** - Convert PDF pages to images
+- **PDF to RTF** - Convert PDFs to Rich Text Format with images and formatting
+- **PDF to EPUB** - Convert PDFs to EPUB e-books with advanced options
+- **PDF to HTML** - Convert PDFs to web pages with styling
+- **PDF to Text** - Extract plain text from PDFs with OCR support
+
+## 🚀 Super Easy Setup (Choose Your Computer Type)
+
+### For Mac Users 🍎
+
+#### Step 1: Install LibreOffice (The Magic Tool)
+1. Open **Terminal** (press `Cmd + Space`, type "Terminal", press Enter)
+2. Copy and paste this command:
+   ```bash
+   brew install --cask libreoffice
+   ```
+3. Press Enter and wait for it to finish (it might take a few minutes)
+
+#### Step 2: Install Python Dependencies for PDF to PowerPoint
+1. In **Terminal**, install the required system tools:
+   ```bash
+   brew install poppler
+   ```
+2. Install Python packages for PDF to PowerPoint conversion:
+   ```bash
+   cd Desktop/omniconverter-pdf-suite/server
+   source pdf_converter_env/bin/activate
+   pip install pdf2image python-pptx Pillow pdfplumber pandas openpyxl
+   ```
+
+#### Step 3: Install the App
+1. Open **Terminal** again
+2. Type these commands one by one (press Enter after each):
+   ```bash
+   cd Desktop
+   git clone https://github.com/your-username/omniconverter-pdf-suite.git
+   cd omniconverter-pdf-suite
+   npm install
+   cd server
+   npm install
+   cd ..
+   ```
+
+#### Step 4: Tell the App Where LibreOffice Is
+1. Open the file `server/server.js` in any text editor
+2. Find the line that says `const libreOfficePath =`
+3. Make sure it looks like this:
+   ```javascript
+   const libreOfficePath = '/Applications/LibreOffice.app/Contents/MacOS/soffice';
+   ```
+
+#### Step 5: Run the App
+1. Open **Terminal**
+2. Type these commands in two different Terminal windows:
+
+**Terminal 1 (for the backend):**
+```bash
+cd Desktop/omniconverter-pdf-suite/server
+node server.js
+```
+
+**Terminal 2 (for the frontend):**
+```bash
+cd Desktop/omniconverter-pdf-suite
+npm run dev
+```
+
+3. Open your web browser and go to: `http://localhost:5173`
+
+### For Windows Users 🪟
+
+#### Step 1: Install LibreOffice (The Magic Tool)
+1. Go to [LibreOffice.org](https://www.libreoffice.org/download/download/)
+2. Click the big "Download" button
+3. Run the installer and follow the instructions
+4. Remember where you installed it (usually `C:\Program Files\LibreOffice\`)
+
+#### Step 2: Install Python Dependencies for PDF to PowerPoint
+1. Download and install Python from [python.org](https://www.python.org/downloads/)
+2. Open **Command Prompt** as Administrator
+3. Install the required system tools:
+   ```cmd
+   # Download poppler for Windows (you'll need to find a pre-built version)
+   # Or use the Python-only approach without poppler
+   ```
+4. Install Python packages for PDF to PowerPoint conversion:
+   ```cmd
+   cd Desktop\omniconverter-pdf-suite\server
+   pdf_converter_env\Scripts\activate
+   pip install pdf2image python-pptx Pillow pdfplumber pandas openpyxl
+   ```
+
+#### Step 3: Install the App
+1. Open **Command Prompt** (press `Windows + R`, type "cmd", press Enter)
+2. Type these commands one by one (press Enter after each):
+   ```cmd
+   cd Desktop
+   git clone https://github.com/your-username/omniconverter-pdf-suite.git
+   cd omniconverter-pdf-suite
+   npm install
+   cd server
+   npm install
+   cd ..
+   ```
+
+#### Step 4: Tell the App Where LibreOffice Is
+1. Open the file `server/server.js` in Notepad or any text editor
+2. Find the line that says `const libreOfficePath =`
+3. Make sure it looks like this:
+   ```javascript
+   const libreOfficePath = 'C:\\Program Files\\LibreOffice\\program\\soffice.exe';
+   ```
+
+#### Step 5: Run the App
+1. Open **Command Prompt**
+2. Type these commands in two different Command Prompt windows:
+
+**Command Prompt 1 (for the backend):**
+```cmd
+cd Desktop\omniconverter-pdf-suite\server
+node server.js
+```
+
+**Command Prompt 2 (for the frontend):**
+```cmd
+cd Desktop\omniconverter-pdf-suite
+npm run dev
+```
+
+3. Open your web browser and go to: `http://localhost:5173`
 
 ## 🔧 Installing Ghostscript (Required for PDF Compression)
 
-**What is Ghostscript?** Ghostscript is a special command-line tool that helps compress PDF files to make them smaller. It's like a magic shrinker for PDFs! It's not a Python library - it's a system application that our Python script calls.
+**What is Ghostscript?** Ghostscript is a special tool that helps compress PDF files to make them smaller. It's like a magic shrinker for PDFs!
 
-### For macOS 🍎
+### For Mac Users 🍎
 
 1. Open **Terminal** (press `Cmd + Space`, type "Terminal", press Enter)
 2. Copy and paste this command:
@@ -27,7 +158,7 @@ This server provides PDF conversion capabilities using LibreOffice in headless m
 4. Test if it worked by typing: `gs --version`
    - You should see something like: `GPL Ghostscript 10.05.1`
 
-### For Windows 🪟
+### For Windows Users 🪟
 
 1. **Option 1 - Using Chocolatey (Easiest):**
    - Open **Command Prompt** as Administrator
@@ -79,7 +210,7 @@ This server provides PDF conversion capabilities using LibreOffice in headless m
 
 ### For Docker Users 🐳
 
-If you're using Docker to run the server, add this to your Dockerfile:
+If you're using Docker to run the app, add this to your Dockerfile:
 
 **For Ubuntu/Debian based images:**
 ```dockerfile
@@ -91,495 +222,213 @@ RUN apt-get update && apt-get install -y ghostscript
 RUN apk add ghostscript
 ```
 
-### Testing Ghostscript Installation
+## 🎉 You're All Set!
 
-After installation, test if Ghostscript works:
+Now you can use the **Compress PDF** feature in the app! It will make your PDF files smaller while keeping them readable.
 
+## 🌐 For Web Hosting (VPS/Server)
+
+### Step 1: Connect to Your Server
+1. Use SSH to connect to your server
+2. Make sure you have root or sudo access
+
+### Step 2: Install System Dependencies
 ```bash
-# Check version
-gs --version
+# Update your server
+sudo apt update
 
-# Test basic functionality
-gs -h
+# Install LibreOffice
+sudo apt install libreoffice libreoffice-writer libreoffice-calc
+
+# Install Python and pip
+sudo apt install python3 python3-pip python3-venv
+
+# Install poppler-utils for PDF to PowerPoint conversion
+sudo apt install poppler-utils
+
+# Install Node.js (if not already installed)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
 
-If you see version information and help text, Ghostscript is working correctly!
-
-## Installation
-
-1. Install Node.js dependencies:
+### Step 3: Download and Setup the App
 ```bash
+# Download the app
+git clone https://github.com/your-username/omniconverter-pdf-suite.git
+cd omniconverter-pdf-suite
 npm install
-```
+cd server
+npm install
 
-2. Set up Python virtual environment:
-```bash
+# Create and activate Python virtual environment
 python3 -m venv pdf_converter_env
-source pdf_converter_env/bin/activate  # On Windows: pdf_converter_env\Scripts\activate
+source pdf_converter_env/bin/activate
+
+# Install Python packages for PDF conversions
+pip install pdf2image python-pptx Pillow pdfplumber pandas openpyxl pdf2docx fpdf2
 ```
 
-3. Install Python packages for all PDF conversions:
-```bash
-pip install pdf2image python-pptx Pillow pdfplumber pandas openpyxl pdf2docx fpdf2 PyPDF2 ebooklib pytesseract
-```
+### Step 4: Configure the App
+1. Edit the server file:
+   ```bash
+   nano server/server.js
+   ```
+2. Make sure the LibreOffice path is:
+   ```javascript
+   const libreOfficePath = 'libreoffice';
+   ```
+3. Save and exit (Ctrl+X, then Y, then Enter)
 
-4. Start the server:
+### Step 5: Run the App
 ```bash
+# Start the backend
+cd server
 node server.js
+
+# In another terminal, start the frontend
+cd ..
+npm run dev
 ```
 
-The server will run on `http://localhost:5001` by default.
+## 🔧 PDF to PowerPoint Conversion Setup
 
-## PDF to PowerPoint Conversion Setup
-
-### Required Python Packages
+### Required Python Packages:
 ```bash
 pip install pdf2image python-pptx Pillow pdfplumber pandas openpyxl
 ```
 
-### System Dependencies
+### System Dependencies:
+- **macOS**: `brew install poppler`
+- **Ubuntu/Debian**: `sudo apt install poppler-utils`
+- **Windows**: Download poppler binaries or use text-only conversion
 
-#### macOS
+### Conversion Methods:
+1. **Image-based Conversion**: 
+   - Converts PDF pages to high-quality images
+   - Preserves original layout and formatting
+   - Better visual quality
+   - Requires `pdf2image` and `poppler`
+
+2. **Text-based Conversion**:
+   - Extracts text from PDF pages
+   - Creates editable PowerPoint slides
+   - Smaller file size
+   - Works without `poppler`
+
+### Troubleshooting PDF to PowerPoint:
+
+#### "poppler not found" Error (macOS/Linux):
 ```bash
-# Install poppler for pdf2image
+# macOS
 brew install poppler
 
-# Verify installation
-which pdftoppm
-```
-
-#### Ubuntu/Debian Linux
-```bash
-# Install poppler-utils
-sudo apt update
+# Ubuntu/Debian
 sudo apt install poppler-utils
 
-# Verify installation
-which pdftoppm
+# CentOS/RHEL
+sudo yum install poppler-utils
 ```
 
-#### CentOS/RHEL/Fedora
+#### "pdf2image import error" (Windows):
+- Use text-based conversion instead
+- Or install poppler binaries manually
+
+#### "python-pptx not found":
 ```bash
-# Install poppler-utils
-sudo yum install poppler-utils  # CentOS/RHEL
-# OR
-sudo dnf install poppler-utils  # Fedora
-
-# Verify installation
-which pdftoppm
+pip install python-pptx
 ```
 
-#### Windows
+#### "PIL/Pillow not found":
 ```bash
-# Option 1: Use text-based conversion (no poppler needed)
-# This works without additional system dependencies
-
-# Option 2: Install poppler binaries manually
-# Download from: https://github.com/oschwartz10612/poppler-windows/releases
-# Extract to C:\poppler and add to PATH
+pip install Pillow
 ```
 
-### Conversion Methods
-
-#### 1. Image-based Conversion (Recommended)
-- **Quality**: High - preserves original layout and formatting
-- **File Size**: Larger - each page becomes an image
-- **Requirements**: `pdf2image`, `python-pptx`, `poppler`
-- **Best For**: Presentations, documents with complex layouts
-
-#### 2. Text-based Conversion
-- **Quality**: Medium - extracts text content
-- **File Size**: Smaller - creates editable text slides
-- **Requirements**: `pdfplumber`, `python-pptx`
-- **Best For**: Text-heavy documents, when you need editable content
-
-### Testing PDF to PowerPoint Conversion
-
-1. **Test Python packages:**
-```bash
-python3 -c "from pdf2image import convert_from_path; from pptx import Presentation; from PIL import Image; print('All imports successful!')"
-```
-
-2. **Test poppler installation:**
-```bash
-pdftoppm -h
-```
-
-3. **Test conversion manually:**
-```bash
-# Create a test PDF or use an existing one
-python3 pdf_converter.py pdf-to-powerpoint test.pdf output.pptx
-```
-
-## LibreOffice Installation & Path Configuration
-
-### macOS
-
-1. **Install LibreOffice:**
-   - Download from [LibreOffice.org](https://www.libreoffice.org/download/download/)
-   - Or install via Homebrew: `brew install --cask libreoffice`
-
-2. **Default Path:**
-   ```javascript
-   const libreOfficePath = '/Applications/LibreOffice.app/Contents/MacOS/soffice';
-   ```
-
-3. **Verify Installation:**
-   ```bash
-   /Applications/LibreOffice.app/Contents/MacOS/soffice --version
-   ```
-
-4. **Alternative Paths (if different):**
-   ```bash
-   # Check if LibreOffice is in Applications
-   ls /Applications/ | grep -i libreoffice
-   
-   # Or check if installed via Homebrew
-   which soffice
-   ```
-
-### Windows
-
-1. **Install LibreOffice:**
-   - Download from [LibreOffice.org](https://www.libreoffice.org/download/download/)
-   - Run the installer and note the installation directory
-
-2. **Default Paths:**
-   ```javascript
-   // 64-bit Windows
-   const libreOfficePath = 'C:\\Program Files\\LibreOffice\\program\\soffice.exe';
-   
-   // 32-bit Windows (if installed in Program Files (x86))
-   const libreOfficePath = 'C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe';
-   ```
-
-3. **Find Your Installation Path:**
-   ```cmd
-   # Search for soffice.exe
-   dir /s /b "C:\Program Files\LibreOffice\program\soffice.exe"
-   dir /s /b "C:\Program Files (x86)\LibreOffice\program\soffice.exe"
-   ```
-
-4. **Add to PATH (Optional):**
-   - Add `C:\Program Files\LibreOffice\program\` to your system PATH
-   - Then you can use: `const libreOfficePath = 'soffice';`
-
-### Linux VPS/Server
-
-1. **Install LibreOffice (Ubuntu/Debian):**
-   ```bash
-   sudo apt update
-   sudo apt install libreoffice
-   ```
-
-2. **Install LibreOffice (CentOS/RHEL/Fedora):**
-   ```bash
-   # CentOS/RHEL
-   sudo yum install libreoffice
-   
-   # Fedora
-   sudo dnf install libreoffice
-   ```
-
-3. **Default Path:**
-   ```javascript
-   const libreOfficePath = 'libreoffice';
-   ```
-
-4. **Verify Installation:**
-   ```bash
-   libreoffice --version
-   which libreoffice
-   ```
-
-5. **Install Headless Dependencies (Important for VPS):**
-   ```bash
-   # Ubuntu/Debian
-   sudo apt install libreoffice-writer libreoffice-calc libreoffice-impress
-   
-   # CentOS/RHEL
-   sudo yum install libreoffice-writer libreoffice-calc libreoffice-impress
-   ```
-
-6. **For Docker/Containerized Environments:**
-   ```dockerfile
-   # Add to your Dockerfile
-   RUN apt-get update && apt-get install -y \
-       libreoffice \
-       libreoffice-writer \
-       libreoffice-calc \
-       libreoffice-impress \
-       && rm -rf /var/lib/apt/lists/*
-   ```
-
-## Configuration in server.js
-
-Update the `libreOfficePath` variable in `server.js` based on your operating system:
-
-```javascript
-// macOS
-const libreOfficePath = '/Applications/LibreOffice.app/Contents/MacOS/soffice';
-
-// Windows
-const libreOfficePath = 'C:\\Program Files\\LibreOffice\\program\\soffice.exe';
-
-// Linux
-const libreOfficePath = 'libreoffice';
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **"spawn libreoffice ENOENT" Error:**
-   - Verify LibreOffice is installed
-   - Check the path is correct
-   - Ensure the executable has proper permissions
-
-2. **Permission Denied:**
-   ```bash
-   # Linux/macOS
-   chmod +x /path/to/soffice
-   
-   # Windows - Run as Administrator
-   ```
-
-3. **Headless Mode Issues on VPS:**
-   ```bash
-   # Install additional dependencies
-   sudo apt install xvfb
-   
-   # Or use virtual display
-   xvfb-run libreoffice --headless --convert-to pdf file.docx
-   ```
-
-4. **Memory Issues on VPS:**
-   ```bash
-   # Increase swap space if needed
-   sudo fallocate -l 2G /swapfile
-   sudo chmod 600 /swapfile
-   sudo mkswap /swapfile
-   sudo swapon /swapfile
-   ```
-
-### PDF to PowerPoint Specific Issues
-
-1. **"poppler not found" Error:**
-   ```bash
-   # macOS
-   brew install poppler
-   
-   # Ubuntu/Debian
-   sudo apt install poppler-utils
-   
-   # CentOS/RHEL
-   sudo yum install poppler-utils
-   ```
-
-2. **"pdf2image import error":**
-   ```bash
-   # Reinstall pdf2image
-   pip uninstall pdf2image
-   pip install pdf2image
-   
-   # Or use text-based conversion instead
-   ```
-
-3. **"python-pptx not found":**
-   ```bash
-   pip install python-pptx
-   ```
-
-4. **"PIL/Pillow not found":**
-   ```bash
-   pip install Pillow
-   ```
-
-5. **Conversion fails silently:**
-   ```bash
-   # Check Python environment
-   source pdf_converter_env/bin/activate
-   
-   # Test conversion manually
-   python3 pdf_converter.py pdf-to-powerpoint test.pdf output.pptx
-   ```
-
-6. **Large files timeout:**
-   - Increase server timeout settings
-   - Use text-based conversion for large files
-   - Consider splitting large PDFs first
-
-### Testing LibreOffice Installation
-
-Test if LibreOffice works correctly:
-
-```bash
-# Create a test file
-echo "Hello World" > test.txt
-
-# Convert to PDF
-libreoffice --headless --convert-to pdf test.txt
-
-# Check if PDF was created
-ls -la test.pdf
-```
-
-## API Endpoints
-
-- `POST /convert/word-to-pdf` - Convert Word documents to PDF
-- `POST /convert/excel-to-pdf` - Convert Excel files to PDF
-- `POST /convert/powerpoint-to-pdf` - Convert PowerPoint presentations to PDF
-- `POST /convert/text-to-pdf` - Convert text files to PDF
-- `POST /convert/html-to-pdf` - Convert HTML files to PDF
-- `POST /convert/pdf-to-word` - Convert PDF to Word documents
-- `POST /convert/pdf-to-excel` - Convert PDF to Excel spreadsheets
-- `POST /convert/pdf-to-powerpoint` - Convert PDF to PowerPoint presentations
-
-## Manual Cleanup Process
-
-The server includes an automatic cleanup system that runs every 15 minutes to remove old temporary files, but you can also trigger manual cleanup when needed.
-
-### Automatic Cleanup System
-
-The server automatically cleans up:
-- **Uploaded files** older than 30 minutes in the `uploads/` directory
-- **Temporary files** older than 30 minutes in the `temp_pdf/` directory  
-- **Temporary files** older than 30 minutes in the `temp/` directory
-
-### Manual Cleanup Endpoint
-
-You can trigger manual cleanup using the cleanup endpoint:
-
-```bash
-# Trigger manual cleanup via curl
-curl -X POST http://localhost:5001/cleanup
-
-# Or using any HTTP client
-POST http://localhost:5001/cleanup
-```
-
-**Response:**
-```json
-{
-  "message": "Cleanup completed successfully"
-}
-```
-
-### Manual File Cleanup Commands
-
-If you need to manually clean up files from the command line:
-
-#### Clean up uploads directory:
-```bash
-# Remove all files in uploads directory
-rm -rf server/uploads/*
-
-# Remove files older than 1 hour
-find server/uploads/ -type f -mmin +60 -delete
-```
-
-#### Clean up temp directories:
-```bash
-# Remove all files in temp_pdf directory
-rm -rf server/temp_pdf/*
-
-# Remove all files in temp directory
-rm -rf server/temp/*
-
-# Remove files older than 1 hour from both directories
-find server/temp_pdf/ -type f -mmin +60 -delete
-find server/temp/ -type f -mmin +60 -delete
-```
-
-#### Clean up all temporary files at once:
-```bash
-# Remove all temporary files from all directories
-rm -rf server/uploads/* server/temp_pdf/* server/temp/*
-```
-
-### Cleanup Monitoring
-
-You can monitor cleanup activities in the server console:
-
-```bash
-# Start the server and watch for cleanup logs
-npm start
-
-# Look for cleanup messages like:
-# [CLEANUP] Removed old upload file: filename.pdf
-# [CLEANUP] Removed old temp file: temp_filename.pdf
-```
-
-### Cleanup Configuration
-
-The automatic cleanup system can be configured by modifying these values in `server.js`:
-
-```javascript
-// Cleanup interval (currently 15 minutes)
-setInterval(cleanupOrphanedFiles, 15 * 60 * 1000);
-
-// File age threshold (currently 30 minutes)
-const maxAge = 30 * 60 * 1000; // 30 minutes
-```
-
-### Troubleshooting Cleanup Issues
-
-#### Problem: Files not being cleaned up
-**Solutions:**
-1. Check if the server is running the automatic cleanup
-2. Verify file permissions in the directories
-3. Check server logs for cleanup errors
-4. Trigger manual cleanup via the endpoint
-
-#### Problem: Cleanup endpoint not responding
-**Solutions:**
-1. Ensure the server is running
-2. Check if the endpoint is accessible at `http://localhost:5001/cleanup`
-3. Verify there are no firewall issues
-4. Check server logs for errors
-
-#### Problem: Disk space still filling up
-**Solutions:**
-1. Check for files outside the monitored directories
-2. Verify the cleanup function is working
-3. Consider reducing the cleanup interval
-4. Manually clean up files using command line tools
-
-### Production Cleanup Recommendations
-
-For production environments:
-
-1. **Set up monitoring** for disk space usage
-2. **Configure log rotation** to prevent log files from growing too large
-3. **Set up alerts** for when disk space is low
-4. **Regular manual cleanup** during maintenance windows
-5. **Monitor cleanup logs** for any issues
-
-### Cleanup Safety Features
-
-The cleanup system includes several safety features:
-- **Error handling**: Continues operation even if individual file deletions fail
-- **Graceful degradation**: Handles missing directories without crashing
-- **Logging**: Records all cleanup activities for monitoring
-- **Non-blocking**: Cleanup doesn't interfere with ongoing conversions
-
-## File Upload Limits
-
-- Maximum file size: 50MB
-- Supported formats: .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt, .jpg, .jpeg, .png, .gif, .bmp
-
-## Security Notes
-
-- The server creates temporary files in the `uploads/` directory
-- Consider implementing file cleanup mechanisms for production use
-- Ensure proper CORS configuration for your frontend domain 
-
-# 📚 EPUB to PDF Conversion with Calibre (Kid-Friendly Server Guide)
-
-## What is Calibre?
+## 🎮 How to Use the App
+
+1. **Open the app** in your web browser
+2. **Choose what you want to convert** (Word, Excel, Image, or PDF conversions)
+3. **Click "Choose File"** and select your file
+4. **Select conversion options** (for PDF to PowerPoint, choose image or text method)
+5. **Click "Convert"**
+6. **Wait for the magic to happen!** ✨
+7. **Download your converted file**
+
+## 🆘 If Something Goes Wrong
+
+### "LibreOffice not found" Error
+- **Mac:** Make sure you ran the `brew install` command
+- **Windows:** Make sure you installed LibreOffice from the website
+- **Linux:** Make sure you ran `sudo apt install libreoffice`
+
+### "Python packages not found" Error
+- Make sure you activated the virtual environment: `source pdf_converter_env/bin/activate`
+- Install missing packages: `pip install [package-name]`
+
+### "poppler not found" Error
+- Install poppler as shown in the setup instructions above
+- Or use text-based PDF to PowerPoint conversion
+
+### "npm not found" Error
+- Install Node.js from [nodejs.org](https://nodejs.org/)
+
+### "Port already in use" Error
+- Close other programs that might be using the same port
+- Or change the port number in the code
+
+### App won't start
+- Make sure you're in the right folder
+- Make sure you ran `npm install` in both the main folder and the server folder
+- Check that both Terminal/Command Prompt windows are running
+
+## 📁 What Files Can You Convert?
+
+### To PDF:
+- **Word files:** .doc, .docx
+- **Excel files:** .xls, .xlsx  
+- **PowerPoint files:** .ppt, .pptx
+- **Text files:** .txt
+- **Picture files:** .jpg, .jpeg, .png, .gif, .bmp
+
+### From PDF:
+- **PDF to Word:** .pdf → .docx
+- **PDF to Excel:** .pdf → .xlsx
+- **PDF to PowerPoint:** .pdf → .pptx
+- **PDF to Image:** .pdf → .jpg, .png
+- **PDF to Text:** .pdf → .txt
+
+## 🎉 You're Done!
+
+Now you can convert files to PDF and convert PDFs to other formats! The app will work on your computer and you can also put it on a web server so other people can use it too.
+
+## 💡 Pro Tips
+
+- **Keep both Terminal/Command Prompt windows open** while using the app
+- **Restart the app** if something stops working
+- **Check the file size** - very big files might take longer to convert
+- **Use the same file types** that are listed above
+
+## 🆘 Need More Help?
+
+If you get stuck, check the detailed guide in `server/README.md` for more technical information.
+
+# 📄 HTML to PDF & EPUB to PDF (Kid-Friendly Guide!)
+
+## How to Use HTML to PDF
+
+1. **Open the app in your web browser.**
+2. **Find the "HTML to PDF" tool** in the sidebar.
+3. You can:
+   - **Upload an HTML file** (like `myfile.html`)
+   - **Or paste your HTML code** in the box.
+4. Click the **"Convert to PDF"** button.
+5. Wait a few seconds. When it's done, click **"Download"** to get your PDF!
+
+> **Note:** Only simple (static) HTML works best. If your page uses lots of magic (like JavaScript or fancy styles from the internet), it might not look perfect in the PDF.
+
+## How to Set Up Calibre for EPUB to PDF (So It Works!)
+
+### What is Calibre?
 Calibre is a free program that helps turn eBooks (like `.epub` files) into PDFs. We use it on the server to do the magic!
-
-## How to Set Up Calibre for EPUB to PDF
 
 ### 🐧 On Linux VPS (like Ubuntu)
 1. **Open your terminal.**
@@ -597,21 +446,15 @@ Calibre is a free program that helps turn eBooks (like `.epub` files) into PDFs.
    ebook-convert --version
    ```
    If you see a version number, you're good!
-4. **You do NOT need the full path** in your code if this works. Just use `'ebook-convert'`.
-5. If you want to be sure, type:
-   ```sh
-   which ebook-convert
-   ```
-   If it prints something like `/usr/bin/ebook-convert`, you're all set!
 
 ### 🍏 On Mac
 1. **Go to** [https://calibre-ebook.com/download](https://calibre-ebook.com/download)
 2. Download and install Calibre like any other app.
-3. In your server code, use this path:
+3. To make sure the server can use it, use this path in your code:
    ```
    /Applications/calibre.app/Contents/MacOS/ebook-convert
    ```
-4. To check, open Terminal and type:
+   Or, open Terminal and type:
    ```sh
    /Applications/calibre.app/Contents/MacOS/ebook-convert --version
    ```
@@ -631,252 +474,277 @@ Calibre is a free program that helps turn eBooks (like `.epub` files) into PDFs.
    ```
    If you see a version number, it works!
 
----
-
 ## If You Get Stuck
-- Make sure the file you upload ends with `.epub`.
+- Make sure the file you upload ends with `.html` or `.epub`.
 - If you see an error, read the message. It usually tells you what went wrong.
 - Ask an adult for help if you need it. 😊
 
----
-
 Happy converting! 🚀
 
-# 📄 PDF to Word Conversion Setup Guide
+# 📄 RTF to PDF (Kid-Friendly Guide!)
+
+## How to Use RTF to PDF
+
+1. **Open the app in your web browser.**
+2. **Find the "RTF to PDF" tool** in the sidebar.
+3. **Upload an RTF file** (it should end with `.rtf`).
+4. Click the **"Convert to PDF"** button.
+5. Wait a few seconds. When it's done, click **"Download"** to get your PDF!
+
+> **Note:** Only .rtf files are supported. If you upload something else, it won't work.
+
+# 📄 Vector to PDF (SVG to PDF) (Kid-Friendly Guide!)
+
+## How to Use Vector to PDF
+
+1. **Open the app in your web browser.**
+2. **Find the "Vector to PDF (SVG)" tool** in the sidebar.
+3. **Upload an SVG file** (it should end with `.svg`).
+4. Click the **"Convert to PDF"** button.
+5. Wait a few seconds. When it's done, click **"Download"** to get your PDF!
+
+> **Note:** Only .svg files are supported. If you upload something else, it won't work. Very fancy SVGs might not look perfect in the PDF.
+
+# 📄 PDF to Word Conversion Setup Guide (For 10-Year-Olds!)
 
 ## What is PDF to Word Conversion?
 
-This feature converts PDF files back into Word documents (.docx format) using Python libraries. It can extract text, tables, and images from PDFs!
+This amazing feature turns PDF files back into Word documents (.docx format)! It can extract text, tables, and even some images from PDFs and put them into a Word document you can edit.
 
-## Required Python Libraries
+## What You Need for PDF to Word Conversion
 
-The PDF to Word conversion uses these Python libraries:
-- `pdf2docx` - Extracts text and tables from PDFs
-- `fpdf2` - Handles PDF processing
-- `python-docx` - Creates Word documents
+The backend server needs these special Python tools:
+- `pdf2docx` - The main tool that extracts text and tables from PDFs
+- `fpdf2` - Helps process PDF files
+- `python-docx` - Creates the Word documents
 
-## How to Set Up PDF to Word Conversion
+## How to Set Up PDF to Word Conversion on Your Backend Server
 
-### For Linux VPS (Ubuntu/Debian)
+### For Linux VPS (Ubuntu/Debian) 🐧
 
 #### Step 1: Install Python and pip
 ```bash
-# Update your system
+# Update your system first
 sudo apt update && sudo apt upgrade -y
 
-# Install Python 3 and pip
+# Install Python 3 and pip (the tool installer)
 sudo apt install python3 python3-pip python3-venv
 ```
 
-#### Step 2: Create Python Virtual Environment
+#### Step 2: Create a Special Python Environment
 ```bash
 # Go to your server folder
 cd server
 
-# Create a virtual environment
+# Create a special environment for Python packages
 python3 -m venv pdf_converter_env
 
-# Activate the environment
+# Turn on the environment
 source pdf_converter_env/bin/activate
 ```
 
-#### Step 3: Install Required Python Packages
+#### Step 3: Install the Magic Python Tools
 ```bash
-# Install the required libraries
+# Install the special libraries for PDF to Word conversion
 pip install pdf2docx fpdf2 python-docx
-
-# Or install from requirements.txt if you have one
-pip install -r requirements.txt
 ```
 
-#### Step 4: Test the Installation
+#### Step 4: Test if Everything Works
 ```bash
-# Test if the libraries work
+# Test if all the tools are installed correctly
 python3 -c "import pdf2docx; import fpdf2; import docx; print('All libraries installed successfully!')"
 ```
 
 #### Step 5: Start Your Server
 ```bash
-# Make sure you're in the server folder and environment is activated
+# Make sure you're in the server folder and the environment is on
 cd server
 source pdf_converter_env/bin/activate
 npm start
 ```
 
-🎉 **PDF to Word conversion is now ready on your VPS!**
+🎉 **PDF to Word conversion is now working on your VPS!**
 
-### For macOS Laptop
+### For macOS Laptop 🍎
 
-#### Step 1: Install Python (if not already installed)
+#### Step 1: Install Python (if you don't have it)
 ```bash
-# Install Homebrew if you don't have it
+# Install Homebrew first (if you don't have it)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install Python
+# Install Python using Homebrew
 brew install python
 ```
 
-#### Step 2: Create Python Virtual Environment
+#### Step 2: Create a Special Python Environment
 ```bash
 # Go to your server folder
 cd server
 
-# Create a virtual environment
+# Create a special environment
 python3 -m venv pdf_converter_env
 
-# Activate the environment
+# Turn on the environment
 source pdf_converter_env/bin/activate
 ```
 
-#### Step 3: Install Required Python Packages
+#### Step 3: Install the Magic Python Tools
 ```bash
-# Install the required libraries
+# Install the special libraries
 pip install pdf2docx fpdf2 python-docx
 ```
 
-#### Step 4: Test the Installation
+#### Step 4: Test if Everything Works
 ```bash
-# Test if the libraries work
+# Test if all the tools work
 python3 -c "import pdf2docx; import fpdf2; import docx; print('All libraries installed successfully!')"
 ```
 
 #### Step 5: Start Your Server
 ```bash
-# Make sure you're in the server folder and environment is activated
+# Make sure the environment is on and start the server
 cd server
 source pdf_converter_env/bin/activate
 npm start
 ```
 
-🎉 **PDF to Word conversion is now ready on your Mac!**
+🎉 **PDF to Word conversion is now working on your Mac!**
 
-### For Windows Laptop
+### For Windows Laptop 💻
 
-#### Step 1: Install Python (if not already installed)
+#### Step 1: Install Python (if you don't have it)
 1. Go to https://python.org/
-2. Download Python 3.x (latest version)
+2. Download Python 3.x (the newest version)
 3. Run the installer
-4. **Important**: Check "Add Python to PATH" during installation
+4. **Very Important**: Check the box that says "Add Python to PATH" when installing!
 
 #### Step 2: Open Command Prompt
-1. Press `Windows + R`
+1. Press `Windows + R` on your keyboard
 2. Type `cmd` and press Enter
-3. Navigate to your project folder
+3. Use `cd` command to go to your project folder
 
-#### Step 3: Create Python Virtual Environment
+#### Step 3: Create a Special Python Environment
 ```cmd
 # Go to your server folder
 cd server
 
-# Create a virtual environment
+# Create a special environment
 python -m venv pdf_converter_env
 
-# Activate the environment
+# Turn on the environment
 pdf_converter_env\Scripts\activate
 ```
 
-#### Step 4: Install Required Python Packages
+#### Step 4: Install the Magic Python Tools
 ```cmd
-# Install the required libraries
+# Install the special libraries
 pip install pdf2docx fpdf2 python-docx
 ```
 
-#### Step 5: Test the Installation
+#### Step 5: Test if Everything Works
 ```cmd
-# Test if the libraries work
+# Test if all the tools work
 python -c "import pdf2docx; import fpdf2; import docx; print('All libraries installed successfully!')"
 ```
 
 #### Step 6: Start Your Server
 ```cmd
-# Make sure you're in the server folder and environment is activated
+# Make sure the environment is on and start the server
 cd server
 pdf_converter_env\Scripts\activate
 npm start
 ```
 
-🎉 **PDF to Word conversion is now ready on your Windows laptop!**
+🎉 **PDF to Word conversion is now working on your Windows laptop!**
 
-## How to Use PDF to Word Conversion
+## How to Use PDF to Word Conversion in the App
 
-1. **Upload a PDF file** through the web interface
-2. **Select "PDF to Word"** conversion option
-3. **Click "Convert"**
-4. **Download the .docx file** when conversion is complete
+1. **Open the app** in your web browser (usually http://localhost:5173)
+2. **Look for "PDF to Word"** in the sidebar menu
+3. **Click "Choose File"** and select a PDF file from your computer
+4. **Click "Convert"** button
+5. **Wait a moment** while the magic happens! ✨
+6. **Click "Download"** when the Word file is ready
 
-## Troubleshooting PDF to Word Conversion
+## What Can PDF to Word Conversion Do? ✨
 
-### Problem: "Module not found" error
-**Solution**: Make sure you activated the Python environment:
+- ✅ **Copy all text** from PDF pages into Word
+- ✅ **Convert tables** into proper Word tables you can edit
+- ✅ **Keep basic formatting** like bold and italic text
+- ✅ **Handle multiple pages** - converts the whole PDF
+- ✅ **Create .docx files** that work with Microsoft Word
+- ⚠️ **Simple images only** - complex graphics might not work perfectly
+- ⚠️ **Basic layouts** - very fancy PDF designs might look different
+
+## If Something Goes Wrong 🔧
+
+### Problem: "Module not found" error when converting
+**What to do**: Make sure the Python environment is turned on in your server:
 ```bash
 # Windows
 pdf_converter_env\Scripts\activate
 
-# macOS/Linux
+# Mac/Linux  
 source pdf_converter_env/bin/activate
 ```
 
+### Problem: Conversion button doesn't work
+**What to do**: 
+1. Check if your backend server is running
+2. Look at the browser console for error messages (press F12)
+3. Make sure your PDF file isn't too big (under 50MB works best)
+
+### Problem: Tables look weird in the Word file
+**What to do**: Simple tables work best! Very complex tables with merged cells might not convert perfectly.
+
 ### Problem: "Permission denied" error
-**Solution**: Make sure you have write permissions in the server folder
+**What to do**: Make sure you have permission to write files in the server folder
 
-### Problem: Conversion fails
-**Solution**: 
-1. Check if the PDF file is not corrupted
-2. Make sure the PDF is not password-protected
-3. Check the server console for error messages
+## Fun Facts About PDF to Word Conversion 🤓
 
-### Problem: Tables not converting properly
-**Solution**: Complex tables might not convert perfectly. Simple tables work best.
+- The conversion happens on your server, not in your browser
+- PDF files are temporarily stored and then automatically deleted for security
+- The Python tools are really smart and can understand most PDF structures
+- Word files created are fully editable - you can change anything you want!
 
-## What the PDF to Word Conversion Does
+## Security Notes 🔒
 
-- ✅ **Extracts text** from PDF pages
-- ✅ **Converts tables** to Word table format
-- ✅ **Preserves basic formatting** (bold, italic, etc.)
-- ✅ **Handles multiple pages**
-- ⚠️ **Limited image support** (basic images only)
-- ⚠️ **Complex layouts** may not convert perfectly
+- Your PDF files are processed safely on your own server
+- Files are automatically deleted after conversion
+- No files are stored permanently
+- The conversion happens in a secure Python environment
 
-## Security Notes
+Happy PDF to Word converting! Turn those PDFs into editable Word documents! 📄➡️📝
 
-- PDF files are processed temporarily and deleted after conversion
-- No files are stored permanently on the server
-- The conversion happens in a Python virtual environment for isolation
-
-Happy PDF to Word converting! 📄➡️📝 
-
-# Advanced PDF Conversion Features
+# 📚 Advanced PDF Conversion Features
 
 ## PDF to RTF (Rich Text Format) Conversion
 
-Convert PDFs to RTF format with advanced formatting and image support.
+Convert PDFs to RTF format with advanced formatting options:
 
 ### Features:
 - **Page Selection**: Convert specific pages or all pages
 - **Formatting Preservation**: Maintain original text formatting
 - **Image Inclusion**: Embed images from PDF into RTF
-- **Font Size Control**: Small, medium, or large text
+- **Font Size**: Choose small, medium, or large text
 - **Line Spacing**: Single, normal, or double spacing
 - **Page Breaks**: Add page breaks between PDF pages
 - **Custom Title**: Add a custom document title
 
-### Required Python Packages:
+### Setup Requirements:
 ```bash
+# Install additional Python packages
 pip install PyPDF2 Pillow pdf2image pytesseract
-```
 
-### System Dependencies:
-- **Tesseract OCR**: For OCR support on image-based PDFs
-- **Poppler-utils**: For better image handling
-
-### Testing:
-```bash
-python pdf_converter.py pdf-to-rtf sample.pdf output.rtf --options '{"include_images": true, "font_size": "medium"}'
+# Install Tesseract OCR (for image-based PDFs)
+# macOS: brew install tesseract
+# Ubuntu: sudo apt install tesseract-ocr
+# Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
 ```
 
 ## PDF to EPUB (E-Book Format) Conversion
 
-Convert PDFs to EPUB e-books with comprehensive formatting options.
+Convert PDFs to EPUB e-books with comprehensive options:
 
 ### Features:
 - **Page Selection**: Convert specific pages or all pages
@@ -889,19 +757,15 @@ Convert PDFs to EPUB e-books with comprehensive formatting options.
 - **Table of Contents**: Generate automatic TOC
 - **Custom Metadata**: Add title, author, and description
 
-### Required Python Packages:
+### Setup Requirements:
 ```bash
+# Install additional Python packages
 pip install PyPDF2 ebooklib pdf2image pytesseract
-```
-
-### Testing:
-```bash
-python pdf_converter.py pdf-to-epub sample.pdf output.epub --options '{"pages_per_chapter": 5, "include_images": true}'
 ```
 
 ## PDF to HTML (Web Format) Conversion
 
-Convert PDFs to HTML web pages with styling and formatting.
+Convert PDFs to HTML web pages with styling:
 
 ### Features:
 - **Page Selection**: Convert specific pages or all pages
@@ -910,19 +774,15 @@ Convert PDFs to HTML web pages with styling and formatting.
 - **Text Extraction**: Extract and format text content
 - **Layout Options**: Preserve or simplify document layout
 
-### Required Python Packages:
+### Setup Requirements:
 ```bash
+# Install additional Python packages
 pip install PyPDF2 pdf2image pytesseract
-```
-
-### Testing:
-```bash
-python pdf_converter.py pdf-to-html sample.pdf output.html --options '{"include_css": true}'
 ```
 
 ## PDF to Text (Plain Text) Conversion
 
-Extract plain text from PDFs with OCR support for image-based PDFs.
+Extract plain text from PDFs with OCR support:
 
 ### Features:
 - **Page Selection**: Extract text from specific pages or all pages
@@ -930,69 +790,58 @@ Extract plain text from PDFs with OCR support for image-based PDFs.
 - **Text Formatting**: Clean and format extracted text
 - **Encoding Options**: Choose text encoding (UTF-8, ASCII, etc.)
 
-### Required Python Packages:
+### Setup Requirements:
 ```bash
+# Install additional Python packages
 pip install PyPDF2 pdf2image pytesseract
 ```
 
-### Testing:
+## Testing the New Conversion Features
+
+Test each conversion type with a sample PDF:
+
 ```bash
+# Test PDF to RTF
+python pdf_converter.py pdf-to-rtf sample.pdf output.rtf --options '{"include_images": true, "font_size": "medium"}'
+
+# Test PDF to EPUB
+python pdf_converter.py pdf-to-epub sample.pdf output.epub --options '{"pages_per_chapter": 5, "include_images": true}'
+
+# Test PDF to HTML
+python pdf_converter.py pdf-to-html sample.pdf output.html --options '{"include_css": true}'
+
+# Test PDF to Text
 python pdf_converter.py pdf-to-text sample.pdf output.txt --options '{"ocr": true}'
 ```
 
-## System Dependencies Installation
+## Troubleshooting Advanced Conversions
 
-### macOS:
+### OCR Issues:
+- **Tesseract not found**: Install Tesseract OCR for your platform
+- **OCR not working**: Make sure language packs are installed
+- **Poor OCR quality**: Try different image preprocessing options
+
+### Image Conversion Issues:
+- **Poppler not found**: Install poppler-utils for better image handling
+- **Image quality**: Adjust image quality settings in conversion options
+- **Large files**: Consider page selection for very large PDFs
+
+### EPUB Generation Issues:
+- **Invalid EPUB**: Check that all required metadata is provided
+- **Large EPUB files**: Reduce image quality or exclude images
+- **Chapter breaks**: Adjust pages per chapter setting
+
+### RTF Formatting Issues:
+- **Missing images**: Ensure image inclusion is enabled
+- **Formatting lost**: Try different formatting preservation options
+- **File size**: RTF files with images can be large
+
+## Complete Python Package Installation
+
+For all advanced PDF conversions, install these packages:
+
 ```bash
-# Install poppler and tesseract
-brew install poppler tesseract
-
-# Verify installation
-which pdftoppm
-which tesseract
-```
-
-### Ubuntu/Debian:
-```bash
-# Install poppler-utils and tesseract
-sudo apt update
-sudo apt install poppler-utils tesseract-ocr tesseract-ocr-eng
-
-# Verify installation
-which pdftoppm
-which tesseract
-```
-
-### CentOS/RHEL/Fedora:
-```bash
-# Install poppler-utils and tesseract
-sudo yum install poppler-utils tesseract  # CentOS/RHEL
-# OR
-sudo dnf install poppler-utils tesseract  # Fedora
-
-# Verify installation
-which pdftoppm
-which tesseract
-```
-
-### Windows:
-```cmd
-# Download and install Tesseract OCR
-# Download from: https://github.com/UB-Mannheim/tesseract/wiki
-# Install to C:\Program Files\Tesseract-OCR
-# Add to PATH or specify full path in code
-
-# For poppler, use Python-only approach or download binaries
-```
-
-## Complete Setup for All Advanced Conversions
-
-### Step 1: Install System Dependencies
-Follow the platform-specific instructions above for poppler and tesseract.
-
-### Step 2: Install Python Packages
-```bash
-# Activate your virtual environment
+# Activate your virtual environment first
 source pdf_converter_env/bin/activate  # Mac/Linux
 # or
 pdf_converter_env\Scripts\activate     # Windows
@@ -1001,88 +850,57 @@ pdf_converter_env\Scripts\activate     # Windows
 pip install pdf2image python-pptx Pillow pdfplumber pandas openpyxl pdf2docx fpdf2 PyPDF2 ebooklib pytesseract
 ```
 
-### Step 3: Test All Conversions
+## System Dependencies for All Platforms
+
+### macOS:
 ```bash
-# Test PDF to RTF
-python pdf_converter.py pdf-to-rtf test.pdf output.rtf --options '{"include_images": true}'
-
-# Test PDF to EPUB
-python pdf_converter.py pdf-to-epub test.pdf output.epub --options '{"pages_per_chapter": 3}'
-
-# Test PDF to HTML
-python pdf_converter.py pdf-to-html test.pdf output.html --options '{"include_css": true}'
-
-# Test PDF to Text
-python pdf_converter.py pdf-to-text test.pdf output.txt --options '{"ocr": true}'
+brew install poppler tesseract
 ```
 
-## Troubleshooting Advanced Conversions
+### Ubuntu/Debian:
+```bash
+sudo apt install poppler-utils tesseract-ocr tesseract-ocr-eng
+```
 
-### OCR Issues:
-- **"Tesseract not found"**: Install Tesseract OCR for your platform
-- **"OCR not working"**: Make sure language packs are installed
-- **"Poor OCR quality"**: Try different image preprocessing options
+### Windows:
+- Download Tesseract from: https://github.com/UB-Mannheim/tesseract/wiki
+- Install to `C:\Program Files\Tesseract-OCR`
+- Add to PATH or specify full path in code
 
-### Image Conversion Issues:
-- **"Poppler not found"**: Install poppler-utils for better image handling
-- **"Image quality issues"**: Adjust image quality settings in conversion options
-- **"Large file issues"**: Consider page selection for very large PDFs
+### CentOS/RHEL/Fedora:
+```bash
+sudo yum install poppler-utils tesseract  # CentOS/RHEL
+# or
+sudo dnf install poppler-utils tesseract  # Fedora
+```
 
-### EPUB Generation Issues:
-- **"Invalid EPUB"**: Check that all required metadata is provided
-- **"Large EPUB files"**: Reduce image quality or exclude images
-- **"Chapter break issues"**: Adjust pages per chapter setting
+## Using the Advanced Features in the Web App
 
-### RTF Formatting Issues:
-- **"Missing images"**: Ensure image inclusion is enabled
-- **"Formatting lost"**: Try different formatting preservation options
-- **"File size too large"**: RTF files with images can be large
+1. **Open the app** in your web browser
+2. **Select the conversion type** from the sidebar:
+   - PDF to RTF
+   - PDF to EPUB
+   - PDF to HTML
+   - PDF to Text
+3. **Upload your PDF file**
+4. **Configure the options** for your conversion
+5. **Click "Convert"** and wait for processing
+6. **Download your converted file**
 
-## Performance Optimization
+## Performance Tips
 
-### For Large PDFs:
-- Use page selection to convert only needed pages
-- Consider excluding images for faster conversion
-- Close other applications during conversion
+- **Large PDFs**: Use page selection to convert only needed pages
+- **Image-heavy PDFs**: Consider excluding images for faster conversion
+- **OCR Processing**: Can be slow for large documents, be patient
+- **Memory Usage**: Close other applications when converting large files
+- **Storage**: Ensure you have enough disk space for temporary files
 
-### For Image-Heavy PDFs:
-- Reduce image quality settings
-- Use page selection to process in chunks
-- Ensure sufficient disk space for temporary files
+## Security and Privacy
 
-### For OCR Processing:
-- OCR can be slow for large documents
-- Consider processing during off-peak hours
-- Monitor memory usage during conversion
-
-## Security Considerations
-
-- All conversions happen locally on your server
+- All conversions happen on your local server
 - Files are automatically cleaned up after conversion
 - No data is sent to external services
 - OCR processing is done locally with Tesseract
 - Temporary files are securely deleted
 
-## API Endpoints for Advanced Conversions
-
-The server provides these endpoints for the new conversion features:
-
-- `POST /convert/pdf-to-rtf` - Convert PDF to RTF
-- `POST /convert/pdf-to-epub` - Convert PDF to EPUB
-- `POST /convert/pdf-to-html` - Convert PDF to HTML
-- `POST /convert/pdf-to-text` - Convert PDF to Text
-
-Each endpoint accepts a PDF file and conversion options as JSON.
-
-## Error Handling
-
-The server includes comprehensive error handling for:
-- Missing dependencies
-- Invalid file formats
-- OCR processing errors
-- Image conversion failures
-- Memory and disk space issues
-
-Check the server console for detailed error messages during conversion.
-
-Happy converting with all the advanced PDF features! 🚀 
+Happy converting with all the new advanced PDF features! 🚀
