@@ -64,6 +64,7 @@ interface ImageState {
 const PdfToImageView: React.FC<PdfToImageViewProps> = ({ task }) => {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -117,6 +118,8 @@ const PdfToImageView: React.FC<PdfToImageViewProps> = ({ task }) => {
       setProcessedFiles([]);
       setProgress(0);
       setCurrentPage(0);
+      setIsPdfLoading(true);
+      setPdfLoaded(false);
       
       try {
         const arrayBuffer = await file.arrayBuffer();
@@ -128,6 +131,8 @@ const PdfToImageView: React.FC<PdfToImageViewProps> = ({ task }) => {
       } catch (error) {
         console.error('Error loading PDF:', error);
         showAlert('Error loading PDF. Please try again.');
+      } finally {
+        setIsPdfLoading(false);
       }
     }
   };
@@ -528,24 +533,32 @@ const PdfToImageView: React.FC<PdfToImageViewProps> = ({ task }) => {
           className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
             isDragging 
               ? 'border-primary bg-primary/5' 
+              : isPdfLoading
+              ? 'border-neutral-400 dark:border-neutral-500 bg-neutral-50 dark:bg-neutral-800'
               : 'border-neutral-500 dark:border-neutral-400 hover:border-primary'
           }`}
-          onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={triggerFileInput}
+          onDragEnter={!isPdfLoading ? handleDragEnter : undefined}
+          onDragOver={!isPdfLoading ? handleDragOver : undefined}
+          onDragLeave={!isPdfLoading ? handleDragLeave : undefined}
+          onDrop={!isPdfLoading ? handleDrop : undefined}
+          onClick={!isPdfLoading ? triggerFileInput : undefined}
         >
           <div className="text-4xl mb-4">📄</div>
           <div className="text-lg font-medium text-neutral-800 dark:text-neutral-200 mb-2">
-            Drag & Drop your PDF here
+            {isPdfLoading ? 'Loading PDF...' : 'Drag & Drop your PDF here'}
           </div>
-          <div className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">or</div>
+          <div className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+            {isPdfLoading ? 'Please wait while we prepare the conversion options' : 'or'}
+          </div>
           <label 
-            className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 cursor-pointer transition-colors"
-            onClick={(e) => e.stopPropagation()}
+            className={`inline-flex items-center px-4 py-2 rounded-lg transition-colors ${
+              isPdfLoading 
+                ? 'bg-neutral-400 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400 cursor-not-allowed'
+                : 'bg-primary text-white hover:bg-primary/90 cursor-pointer'
+            }`}
+            onClick={(e) => !isPdfLoading && e.stopPropagation()}
           >
-            <span>Choose PDF File</span>
+            <span>{isPdfLoading ? 'Loading...' : 'Choose PDF File'}</span>
             <input
               ref={fileInputRef}
               type="file"
@@ -553,6 +566,7 @@ const PdfToImageView: React.FC<PdfToImageViewProps> = ({ task }) => {
               onChange={handleFileChange}
               onClick={(e) => e.stopPropagation()}
               className="hidden"
+              disabled={isPdfLoading}
             />
           </label>
           {pdfFile && (
@@ -560,12 +574,41 @@ const PdfToImageView: React.FC<PdfToImageViewProps> = ({ task }) => {
               <div className="flex items-center">
                 <span className="text-green-600 dark:text-green-400 mr-2">📎</span>
                 <span className="text-sm text-green-700 dark:text-green-300">{pdfFile.name}</span>
+                {isPdfLoading && (
+                  <div className="ml-3 flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600 dark:border-green-400"></div>
+                    <span className="text-xs text-green-600 dark:text-green-400">Loading...</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
 
         {/* Conversion Options */}
+        {isPdfLoading && (
+          <div className="mt-6 space-y-6">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <div className="flex items-center space-x-3">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 dark:border-blue-400"></div>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    <strong>Loading PDF...</strong> Please wait while we prepare the conversion options.
+                  </p>
+                </div>
+                <div className="w-full max-w-md">
+                  <div className="bg-blue-200 dark:bg-blue-800 rounded-full h-2">
+                    <div className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-600 dark:text-blue-400">
+                  Analyzing PDF structure and preparing conversion options...
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {pdfLoaded && (
           <div className="mt-6 space-y-6">
             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
