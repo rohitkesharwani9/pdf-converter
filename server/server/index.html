@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Converter Pro+</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2305974348753248" crossorigin="anonymous"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // or 'media'
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              light: '#4A90E2', // A pleasant blue
+              DEFAULT: '#357ABD',
+              dark: '#2A6198',
+            },
+            secondary: {
+              light: '#50E3C2', // A teal/green
+              DEFAULT: '#38B2AC',
+              dark: '#2C7A7B',
+            },
+            neutral: {
+              50: '#F9FAFB',
+              100: '#F3F4F6',
+              200: '#E5E7EB',
+              300: '#D1D5DB',
+              400: '#9CA3AF',
+              500: '#6B7280',
+              600: '#4B5563',
+              700: '#374151',
+              800: '#1F2937',
+              900: '#111827',
+            }
+          },
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
+          },
+        }
+      }
+    }
+  </script>
+<link rel="stylesheet" href="https://unpkg.com/react-image-crop/dist/ReactCrop.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.523.0",
+    "@mui/material": "https://esm.sh/@mui/material@^5.15.20",
+    "@mui/material/": "https://esm.sh/@mui/material@5.15.20/",
+    "@mui/icons-material": "https://esm.sh/@mui/icons-material@^5.15.20",
+    "@mui/icons-material/": "https://esm.sh/@mui/icons-material@5.15.20/",
+    "@emotion/react": "https://esm.sh/@emotion/react@^11.11.4",
+    "@emotion/styled": "https://esm.sh/@emotion/styled@^11.11.5",
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1",
+    "react-image-crop": "https://esm.sh/react-image-crop@^11.0.5",
+    "heic2any": "https://esm.sh/heic2any@^0.0.4",
+    "react-image-crop/": "https://esm.sh/react-image-crop@^11.0.10/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+<style>
+  /* Dark mode CSS variables */
+  :root {
+    --text-primary: #333;
+    --text-secondary: #666;
+    --card-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --primary-color: #1976d2;
+    --primary-hover: #1565c0;
+    --primary-bg: rgba(25, 118, 210, 0.1);
+    --disabled-bg: #b7b7b7;
+    --chip-bg: #f0f0f0;
+    --info-bg: #e3f2fd;
+    --success-color: #2e7d32;
+    --success-hover: #1b5e20;
+    --success-bg: #e8f5e8;
+    --error-color: #d32f2f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --card-bg: #2d2d2d;
+      --border-color: #404040;
+      --primary-color: #90caf9;
+      --primary-hover: #64b5f6;
+      --primary-bg: rgba(144, 202, 249, 0.2);
+      --disabled-bg: #424242;
+      --chip-bg: #424242;
+      --info-bg: #1e3a5f;
+      --success-color: #4caf50;
+      --success-hover: #45a049;
+      --success-bg: #1b3a1b;
+      --error-color: #f44336;
+    }
+  }
+
+  /* Dark mode CSS variables for .dark class */
+  .dark {
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --card-bg: #2d2d2d;
+    --border-color: #404040;
+    --primary-color: #90caf9;
+    --primary-hover: #64b5f6;
+    --primary-bg: rgba(144, 202, 249, 0.2);
+    --disabled-bg: #424242;
+    --chip-bg: #424242;
+    --info-bg: #1e3a5f;
+    --success-color: #4caf50;
+    --success-hover: #45a049;
+    --success-bg: #1b3a1b;
+    --error-color: #f44336;
+  }
+
+  /* Dark mode button colors for PDF to Excel page */
+  .dark .MuiButton-contained {
+    background-color: #2a6198 !important;
+  }
+  
+  .dark .MuiButton-contained:hover {
+    background-color: #1e4a7a !important;
+  }
+
+  /* Dark mode overrides for MUI components */
+  @media (prefers-color-scheme: dark) {
+    .MuiCard-root {
+      background-color: var(--card-bg) !important;
+      border-color: var(--border-color) !important;
+    }
+    
+    .MuiPaper-root {
+      background-color: var(--card-bg) !important;
+      border-color: var(--border-color) !important;
+    }
+    
+    .MuiTypography-root {
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiButton-root {
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiTextField-root .MuiInputBase-input {
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiTextField-root .MuiInputLabel-root {
+      color: var(--text-secondary) !important;
+    }
+    
+    .MuiTextField-root .MuiOutlinedInput-root fieldset {
+      border-color: var(--border-color) !important;
+    }
+    
+    .MuiAlert-root {
+      background-color: var(--info-bg) !important;
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiChip-root {
+      background-color: var(--chip-bg) !important;
+      color: var(--text-secondary) !important;
+    }
+    
+    .MuiChip-root.MuiChip-colorPrimary {
+      background-color: var(--primary-color) !important;
+      color: white !important;
+    }
+    
+    .MuiListItem-root {
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiListItemText-primary {
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiListItemText-secondary {
+      color: var(--text-secondary) !important;
+    }
+    
+    .MuiIconButton-root {
+      color: var(--text-primary) !important;
+    }
+    
+    .MuiDivider-root {
+      background-color: var(--border-color) !important;
+    }
+  }
+
+  /* AdSense Styles */
+  .ad-container {
+    margin: 0rem 0;
+    text-align: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #a5a5a5;
+  }
+
+  .dark .ad-container {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+
+  .ad-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .ad-label-text {
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .dark .ad-label-text {
+    color: #a0aec0;
+  }
+
+  .ad-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    min-width: 300px;
+  }
+
+  .ad-content ins {
+    display: block !important;
+    text-align: center;
+  }
+</style>
+</head>
+<body class="bg-neutral-100 dark:bg-neutral-900 transition-colors duration-300">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
