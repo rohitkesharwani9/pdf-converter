@@ -1006,21 +1006,6 @@ const PdfToExcelView: React.FC<PdfToExcelViewProps> = ({
         </Button>
       </Box>
 
-      {/* AdSense Ad for PDF to Excel */}
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <AdSense 
-          adSlot="6480016001" 
-          adFormat="auto" 
-          style={{ 
-            width: '100%', 
-            height: 'auto', 
-            margin: '0rem 0 !important',
-            minHeight: '250px',
-            maxWidth: '100%'
-          }}
-        />
-      </Box>
-
       {/* Download Button - Show after successful conversion */}
       {downloadUrl && downloadFilename && (
         <Card sx={{ 
@@ -1070,6 +1055,21 @@ const PdfToExcelView: React.FC<PdfToExcelViewProps> = ({
           </CardContent>
         </Card>
       )}
+
+      {/* AdSense Ad for PDF to Excel - Below Download Section */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+        <AdSense 
+          adSlot="6480016001" 
+          adFormat="auto" 
+          style={{ 
+            width: '100%', 
+            height: 'auto', 
+            margin: '0rem 0 !important',
+            minHeight: '250px',
+            maxWidth: '100%'
+          }}
+        />
+      </Box>
 
       {/* Features Section */}
       <Card sx={{ 
