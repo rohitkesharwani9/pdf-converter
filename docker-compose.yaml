@@ -18,7 +18,7 @@ services:
   backend:
     build:
       context: ./server
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile.backend.simple
     ports:
       - "5002:5002"  # Using port 5002 instead of 5001
     environment:
