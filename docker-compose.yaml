@@ -6,10 +6,10 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "5174:5173"  # Using port 5174 instead of 5173
+      - "5173:5173"  # Changed to port 5173 for frontend
     environment:
       - NODE_ENV=production
-      - VITE_API_URL=http://backend:5002
+      - VITE_API_URL=http://backend:5001
     depends_on:
       - backend
     networks:
@@ -20,10 +20,10 @@ services:
       context: ./server
       dockerfile: Dockerfile.backend.simple
     ports:
-      - "5002:5002"  # Using port 5002 instead of 5001
+      - "5001:5001"  # Changed to port 5001 for backend
     environment:
       - NODE_ENV=production
-      - PORT=5002
+      - PORT=5001
     volumes:
       - ./server/uploads:/app/uploads
       - ./server/temp:/app/temp
