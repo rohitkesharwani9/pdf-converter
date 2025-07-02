@@ -3,8 +3,10 @@ import { ConversionTask, UploadedFile, ProcessedFile } from '../../types';
 import BaseConversionView from './BaseConversionView';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set up the worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
+// Set up the worker with proper path handling
+if (typeof window !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `${window.location.origin}/pdf.worker.min.js`;
+}
 
 interface SplitPdfViewProps {
   task: ConversionTask;
@@ -14,9 +16,14 @@ const SplitPdfView: React.FC<SplitPdfViewProps> = ({ task }) => {
   const [totalPages, setTotalPages] = useState<number | null>(null);
 
   const getPdfPageCount = async (file: File): Promise<number> => {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    return pdfDoc.numPages;
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      return pdfDoc.numPages;
+    } catch (error) {
+      console.error('Failed to load PDF for validation:', error);
+      throw new Error('Could not read PDF. It may be corrupt or protected.');
+    }
   };
 
   useEffect(() => {

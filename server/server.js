@@ -1230,8 +1230,8 @@ const convertPdfToRtf = async (filePath, res, originalName = 'document.pdf', opt
     // Prepare options for Python script
     const optionsArg = JSON.stringify(options);
     
-    // Call Python script with virtual environment (isolated for RTF only)
-    const pythonProcess = spawn(path.join(__dirname, 'pdf_converter_env', 'bin', 'python3'), [
+    // Call Python script with system Python
+    const pythonProcess = spawn('python3', [
       path.join(__dirname, 'pdf_converter.py'),
       'pdf-to-rtf',
       absoluteInputPath,
@@ -1239,8 +1239,7 @@ const convertPdfToRtf = async (filePath, res, originalName = 'document.pdf', opt
       '--options',
       optionsArg
     ], {
-      cwd: __dirname,
-      env: { ...process.env, PYTHONPATH: path.join(__dirname, 'pdf_converter_env', 'lib', 'python3.13', 'site-packages') }
+      cwd: __dirname
     });
     
     let stdout = '';
@@ -1375,8 +1374,8 @@ const convertPdfToSvg = async (filePath, res, originalName = 'document.pdf', opt
     // Prepare options for Python script
     const optionsArg = JSON.stringify(options);
     
-    // Call Python script with virtual environment (isolated for SVG only)
-    const pythonProcess = spawn(path.join(__dirname, 'pdf_converter_env', 'bin', 'python3'), [
+    // Call Python script with system Python
+    const pythonProcess = spawn('python3', [
       path.join(__dirname, 'pdf_converter.py'),
       'pdf-to-svg',
       absoluteInputPath,
@@ -1384,8 +1383,7 @@ const convertPdfToSvg = async (filePath, res, originalName = 'document.pdf', opt
       '--options',
       optionsArg
     ], {
-      cwd: __dirname,
-      env: { ...process.env, PYTHONPATH: path.join(__dirname, 'pdf_converter_env', 'lib', 'python3.13', 'site-packages') }
+      cwd: __dirname
     });
     
     let stdout = '';
