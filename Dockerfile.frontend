@@ -1,5 +1,5 @@
-# Use specific Node.js version for better compatibility
-FROM node:20.11-alpine
+# Build stage
+FROM node:20-bullseye AS builder
 
 # Set working directory
 WORKDIR /app
@@ -7,14 +7,30 @@ WORKDIR /app
 # Copy package.json only
 COPY package.json ./
 
-# Install all dependencies without package-lock.json
-RUN npm install --legacy-peer-deps --no-audit --no-optional
+# Install all dependencies including dev dependencies
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
 # Build the application
 RUN npm run build
+
+# Production stage
+FROM node:20-bullseye AS production
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json
+COPY package.json ./
+
+# Install only production dependencies
+RUN npm install --only=production --legacy-peer-deps
+
+# Copy built application from builder stage
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.js ./
 
 # Expose port
 EXPOSE 5173
