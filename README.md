@@ -2,6 +2,40 @@
 
 Turn your files into PDFs! Convert Word documents, Excel spreadsheets, PowerPoint presentations, text files, and pictures to PDF format. Also convert PDFs to Word, Excel, PowerPoint, and more!
 
+## 🌐 **Live Website**
+**[Visit OmniConverter PDF Suite](https://pdf.coderobo.org)** - Try all 27+ PDF tools online!
+
+## 🏷️ **Topics & Keywords**
+This project covers all major PDF conversion needs:
+- **pdf-converter** - All-in-one PDF conversion suite
+- **html-to-pdf** - Convert web pages to PDF documents
+- **pdf-generation** - Create PDFs from various file formats
+- **pdf-to-excel** - Extract tables and data from PDFs to Excel
+- **pdf-to-image** - Convert PDF pages to JPG, PNG, WEBP images
+- **pdf-to-ppt** - Transform PDFs into editable PowerPoint presentations
+- **word-to-pdf** - Convert DOC/DOCX files to PDF format
+- **pdf-to-word** - Extract text and tables from PDFs to Word documents
+- **svg-to-pdf** - Convert vector graphics to PDF format
+- **excel-to-pdf** - Transform XLS/XLSX spreadsheets to PDF
+- **rtf-to-pdf** - Convert Rich Text Format files to PDF
+- **image-to-pdf** - Convert JPG, PNG, WEBP, HEIC, GIF to PDF
+- **docx-to-pdf** - Microsoft Word documents to PDF conversion
+- **doc-to-pdf** - Legacy Word documents to PDF conversion
+- **xlsx-to-pdf** - Excel spreadsheets to PDF conversion
+- **pdf-to-docx** - PDF to modern Word document format
+- **epub-to-pdf** - E-book format to PDF conversion
+- **xls-to-pdf** - Legacy Excel files to PDF conversion
+- **pdf-to-doc** - PDF to legacy Word document format
+- **pdf-to-xlsx** - PDF to modern Excel spreadsheet format
+- **merge-pdf** - Combine multiple PDF files into one
+- **split-pdf** - Extract pages or ranges from PDF
+- **ocr-pdf** - Make scanned PDFs searchable with text recognition
+- **compress-pdf** - Reduce PDF file size while maintaining quality
+- **protect-pdf** - Add password encryption to PDF files
+- **watermark-pdf** - Add text or image watermarks to PDF
+- **edit-metadata-pdf** - Change PDF title, author, and keywords
+- **organize-pdf** - Reorder, rotate, and delete PDF pages
+
 ## 🎯 What This App Does
 
 - **Word to PDF** - Turn your .doc or .docx files into PDFs
@@ -17,6 +51,17 @@ Turn your files into PDFs! Convert Word documents, Excel spreadsheets, PowerPoin
 - **PDF to EPUB** - Convert PDFs to EPUB e-books with advanced options
 - **PDF to HTML** - Convert PDFs to web pages with styling
 - **PDF to Text** - Extract plain text from PDFs with OCR support
+
+## 🛠️ **PDF Editing & Management Tools**
+
+- **🔗 Merge PDF** - Combine multiple PDF files into one document
+- **✂️ Split PDF** - Extract specific pages or page ranges from PDFs
+- **🎯 Organize PDF Pages** - Reorder, rotate, and delete pages with visual page manager
+- **💧 Add Watermark** - Add text or image watermarks to PDF pages
+- **✏️ Edit PDF Metadata** - Change title, author, subject, and keywords
+- **🔒 Protect PDF** - Add password encryption to secure your PDFs
+- **🗜️ Compress PDF** - Reduce file size while maintaining quality
+- **🔍 OCR PDF** - Make scanned PDFs searchable and selectable with text recognition
 
 ## 🚀 Super Easy Setup (Choose Your Computer Type)
 
