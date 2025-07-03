@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import BaseConversionView from './BaseConversionView';
 import { ConversionType, getTaskById } from '../../constants';
 import { UploadedFile, ProcessedFile } from '../../types';
 import PageManager from '../PageManager';
-import { Box, Typography, CircularProgress } from '@mui/material';
+import { Box, Typography, CircularProgress, Button } from '@mui/material';
+import { Stop } from '@mui/icons-material';
 
 interface PageValidationErrors {
   pageOrder?: string;
@@ -21,8 +22,32 @@ const OrganizePdfView: React.FC = () => {
     deletePages: ''
   });
   const [resetKey, setResetKey] = useState(0);
+  const [currentFileHash, setCurrentFileHash] = useState<string>('');
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const getPageCount = async (file: File) => {
+    // Create a unique hash for the current file
+    const fileHash = `${file.name}-${file.size}-${file.lastModified}`;
+    
+    // If this is a different file, reset the state
+    if (fileHash !== currentFileHash) {
+      setPageCount(null);
+      setPageOperations({
+        pageOrder: '',
+        rotatePages: '',
+        deletePages: ''
+      });
+      setCurrentFileHash(fileHash);
+    }
+
+    // Cancel any ongoing request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create new abort controller for this request
+    abortControllerRef.current = new AbortController();
+    
     setIsLoadingPageCount(true);
     try {
       const formData = new FormData();
@@ -30,24 +55,38 @@ const OrganizePdfView: React.FC = () => {
 
       const response = await fetch('/api/get-pdf-page-count', {
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: abortControllerRef.current.signal
       });
 
       if (response.ok) {
         const data = await response.json();
-        setPageCount(data.pageCount);
+        // Only update if this is still the current file
+        if (fileHash === currentFileHash) {
+          setPageCount(data.pageCount);
+        }
         return data.pageCount;
       } else {
         console.error('Failed to get page count');
-        setPageCount(null);
+        if (fileHash === currentFileHash) {
+          setPageCount(null);
+        }
         return null;
       }
     } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('Page count request was cancelled');
+        return null;
+      }
       console.error('Error getting page count:', error);
-      setPageCount(null);
+      if (fileHash === currentFileHash) {
+        setPageCount(null);
+      }
       return null;
     } finally {
-      setIsLoadingPageCount(false);
+      if (fileHash === currentFileHash) {
+        setIsLoadingPageCount(false);
+      }
     }
   };
 
@@ -111,12 +150,21 @@ const OrganizePdfView: React.FC = () => {
     }
 
     // Get page count when files are uploaded
-    if (files.length > 0 && !pageCount && !isLoadingPageCount) {
+    if (files.length > 0) {
       const file = files[0].file;
       getPageCount(file);
     }
 
     return null;
+  };
+
+  const handleTerminateLoading = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    setIsLoadingPageCount(false);
+    setPageCount(null);
+    setCurrentFileHash('');
   };
 
   const performOrganization = async (files: UploadedFile[], options: Record<string, any>): Promise<ProcessedFile[]> => {
@@ -182,9 +230,15 @@ const OrganizePdfView: React.FC = () => {
   }, []);
 
   const handleClearAll = useCallback(() => {
+    // Cancel any ongoing request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
     // Reset all state to initial values
     setPageCount(null);
     setIsLoadingPageCount(false);
+    setCurrentFileHash('');
     setPageOperations({
       pageOrder: '',
       rotatePages: '',
@@ -239,11 +293,27 @@ const OrganizePdfView: React.FC = () => {
             variant="body2" 
             sx={{ 
               color: 'var(--text-secondary)',
-              textAlign: 'center'
+              textAlign: 'center',
+              mb: 2
             }}
           >
             Please wait while we analyze your PDF file to show organization options.
           </Typography>
+          <Button
+            variant="outlined"
+            startIcon={<Stop />}
+            onClick={handleTerminateLoading}
+            sx={{
+              borderColor: 'var(--error-color)',
+              color: 'var(--error-color)',
+              '&:hover': {
+                borderColor: 'var(--error-color)',
+                backgroundColor: 'rgba(211, 47, 47, 0.1)'
+              }
+            }}
+          >
+            Cancel Processing
+          </Button>
         </Box>
       )}
       
