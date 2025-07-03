@@ -1,10 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import BaseConversionView from './BaseConversionView';
 import { ConversionType, getTaskById } from '../../constants';
 import { UploadedFile, ProcessedFile } from '../../types';
 import PageManager from '../PageManager';
-import { Box, Typography, CircularProgress, Button } from '@mui/material';
-import { Stop } from '@mui/icons-material';
+import { Box, Typography, CircularProgress } from '@mui/material';
 
 interface PageValidationErrors {
   pageOrder?: string;
@@ -15,6 +14,7 @@ interface PageValidationErrors {
 const OrganizePdfView: React.FC = () => {
   const [pageCount, setPageCount] = useState<number | null>(null);
   const [isLoadingPageCount, setIsLoadingPageCount] = useState(false);
+  const [currentFileId, setCurrentFileId] = useState<string>('');
   const [validationErrors, setValidationErrors] = useState<PageValidationErrors>({});
   const [pageOperations, setPageOperations] = useState({
     pageOrder: '',
@@ -22,69 +22,52 @@ const OrganizePdfView: React.FC = () => {
     deletePages: ''
   });
   const [resetKey, setResetKey] = useState(0);
-  const [currentFileHash, setCurrentFileHash] = useState<string>('');
-  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const getPageCount = async (file: File) => {
-    // Create a unique hash for the current file
-    const fileHash = `${file.name}-${file.size}-${file.lastModified}`;
-    
-    // If this is a different file, reset the state
-    if (fileHash !== currentFileHash) {
-      setPageCount(null);
-      setPageOperations({
-        pageOrder: '',
-        rotatePages: '',
-        deletePages: ''
-      });
-      setCurrentFileHash(fileHash);
-    }
-
-    // Cancel any ongoing request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Create new abort controller for this request
-    abortControllerRef.current = new AbortController();
+  const getPageCount = async (file: File, fileId: string) => {
+    // Reset state for new file
+    setPageCount(null);
+    setPageOperations({
+      pageOrder: '',
+      rotatePages: '',
+      deletePages: ''
+    });
+    setValidationErrors({});
+    setResetKey(prev => prev + 1);
     
     setIsLoadingPageCount(true);
+    setCurrentFileId(fileId);
+    
     try {
       const formData = new FormData();
       formData.append('file', file);
 
       const response = await fetch('/api/get-pdf-page-count', {
         method: 'POST',
-        body: formData,
-        signal: abortControllerRef.current.signal
+        body: formData
       });
 
       if (response.ok) {
         const data = await response.json();
         // Only update if this is still the current file
-        if (fileHash === currentFileHash) {
+        if (currentFileId === fileId) {
           setPageCount(data.pageCount);
         }
         return data.pageCount;
       } else {
         console.error('Failed to get page count');
-        if (fileHash === currentFileHash) {
+        if (currentFileId === fileId) {
           setPageCount(null);
         }
         return null;
       }
     } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.log('Page count request was cancelled');
-        return null;
-      }
       console.error('Error getting page count:', error);
-      if (fileHash === currentFileHash) {
+      if (currentFileId === fileId) {
         setPageCount(null);
       }
       return null;
     } finally {
-      if (fileHash === currentFileHash) {
+      if (currentFileId === fileId) {
         setIsLoadingPageCount(false);
       }
     }
@@ -150,21 +133,13 @@ const OrganizePdfView: React.FC = () => {
     }
 
     // Get page count when files are uploaded
-    if (files.length > 0) {
+    if (files.length > 0 && !isLoadingPageCount) {
       const file = files[0].file;
-      getPageCount(file);
+      const fileId = `${file.name}-${file.size}-${file.lastModified}`;
+      getPageCount(file, fileId);
     }
 
     return null;
-  };
-
-  const handleTerminateLoading = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    setIsLoadingPageCount(false);
-    setPageCount(null);
-    setCurrentFileHash('');
   };
 
   const performOrganization = async (files: UploadedFile[], options: Record<string, any>): Promise<ProcessedFile[]> => {
@@ -173,9 +148,10 @@ const OrganizePdfView: React.FC = () => {
     }
 
     const file = files[0].file;
+    const fileId = `${file.name}-${file.size}-${file.lastModified}`;
     
     // Get page count for validation
-    const totalPages = await getPageCount(file);
+    const totalPages = await getPageCount(file, fileId);
     if (!totalPages) {
       throw new Error('Could not determine PDF page count');
     }
@@ -230,15 +206,10 @@ const OrganizePdfView: React.FC = () => {
   }, []);
 
   const handleClearAll = useCallback(() => {
-    // Cancel any ongoing request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    
     // Reset all state to initial values
     setPageCount(null);
     setIsLoadingPageCount(false);
-    setCurrentFileHash('');
+    setCurrentFileId('');
     setPageOperations({
       pageOrder: '',
       rotatePages: '',
@@ -293,27 +264,11 @@ const OrganizePdfView: React.FC = () => {
             variant="body2" 
             sx={{ 
               color: 'var(--text-secondary)',
-              textAlign: 'center',
-              mb: 2
+              textAlign: 'center'
             }}
           >
             Please wait while we analyze your PDF file to show organization options.
           </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<Stop />}
-            onClick={handleTerminateLoading}
-            sx={{
-              borderColor: 'var(--error-color)',
-              color: 'var(--error-color)',
-              '&:hover': {
-                borderColor: 'var(--error-color)',
-                backgroundColor: 'rgba(211, 47, 47, 0.1)'
-              }
-            }}
-          >
-            Cancel Processing
-          </Button>
         </Box>
       )}
       
