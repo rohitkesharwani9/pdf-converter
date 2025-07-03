@@ -3,6 +3,7 @@ import BaseConversionView from './BaseConversionView';
 import { ConversionType, getTaskById } from '../../constants';
 import { UploadedFile, ProcessedFile } from '../../types';
 import PageManager from '../PageManager';
+import { Box, Typography, CircularProgress } from '@mui/material';
 
 interface PageValidationErrors {
   pageOrder?: string;
@@ -12,6 +13,7 @@ interface PageValidationErrors {
 
 const OrganizePdfView: React.FC = () => {
   const [pageCount, setPageCount] = useState<number | null>(null);
+  const [isLoadingPageCount, setIsLoadingPageCount] = useState(false);
   const [validationErrors, setValidationErrors] = useState<PageValidationErrors>({});
   const [pageOperations, setPageOperations] = useState({
     pageOrder: '',
@@ -21,6 +23,7 @@ const OrganizePdfView: React.FC = () => {
   const [resetKey, setResetKey] = useState(0);
 
   const getPageCount = async (file: File) => {
+    setIsLoadingPageCount(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -43,6 +46,8 @@ const OrganizePdfView: React.FC = () => {
       console.error('Error getting page count:', error);
       setPageCount(null);
       return null;
+    } finally {
+      setIsLoadingPageCount(false);
     }
   };
 
@@ -106,7 +111,7 @@ const OrganizePdfView: React.FC = () => {
     }
 
     // Get page count when files are uploaded
-    if (files.length > 0 && !pageCount) {
+    if (files.length > 0 && !pageCount && !isLoadingPageCount) {
       const file = files[0].file;
       getPageCount(file);
     }
@@ -179,6 +184,7 @@ const OrganizePdfView: React.FC = () => {
   const handleClearAll = useCallback(() => {
     // Reset all state to initial values
     setPageCount(null);
+    setIsLoadingPageCount(false);
     setPageOperations({
       pageOrder: '',
       rotatePages: '',
@@ -201,7 +207,47 @@ const OrganizePdfView: React.FC = () => {
       customValidation={customValidation}
       onClearAll={handleClearAll}
     >
-      {pageCount && (
+      {isLoadingPageCount && (
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          mt: 3,
+          p: 3,
+          backgroundColor: 'var(--card-bg)',
+          border: '1px solid var(--border-color)',
+          borderRadius: 2
+        }}>
+          <CircularProgress 
+            size={40} 
+            sx={{ 
+              color: 'var(--primary-color)',
+              mb: 2
+            }} 
+          />
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              color: 'var(--text-primary)',
+              mb: 1
+            }}
+          >
+            Processing PDF...
+          </Typography>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              color: 'var(--text-secondary)',
+              textAlign: 'center'
+            }}
+          >
+            Please wait while we analyze your PDF file to show organization options.
+          </Typography>
+        </Box>
+      )}
+      
+      {pageCount && !isLoadingPageCount && (
         <div className="mt-6">
           <PageManager 
             totalPages={pageCount}
