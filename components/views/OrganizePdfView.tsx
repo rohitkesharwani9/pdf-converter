@@ -14,7 +14,6 @@ interface PageValidationErrors {
 const OrganizePdfView: React.FC = () => {
   const [pageCount, setPageCount] = useState<number | null>(null);
   const [isLoadingPageCount, setIsLoadingPageCount] = useState(false);
-  const [currentFileId, setCurrentFileId] = useState<string>('');
   const [validationErrors, setValidationErrors] = useState<PageValidationErrors>({});
   const [pageOperations, setPageOperations] = useState({
     pageOrder: '',
@@ -23,20 +22,8 @@ const OrganizePdfView: React.FC = () => {
   });
   const [resetKey, setResetKey] = useState(0);
 
-  const getPageCount = async (file: File, fileId: string) => {
-    // Reset state for new file
-    setPageCount(null);
-    setPageOperations({
-      pageOrder: '',
-      rotatePages: '',
-      deletePages: ''
-    });
-    setValidationErrors({});
-    setResetKey(prev => prev + 1);
-    
+  const getPageCount = async (file: File) => {
     setIsLoadingPageCount(true);
-    setCurrentFileId(fileId);
-    
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -48,28 +35,19 @@ const OrganizePdfView: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // Only update if this is still the current file
-        if (currentFileId === fileId) {
-          setPageCount(data.pageCount);
-        }
+        setPageCount(data.pageCount);
         return data.pageCount;
       } else {
         console.error('Failed to get page count');
-        if (currentFileId === fileId) {
-          setPageCount(null);
-        }
+        setPageCount(null);
         return null;
       }
     } catch (error) {
       console.error('Error getting page count:', error);
-      if (currentFileId === fileId) {
-        setPageCount(null);
-      }
+      setPageCount(null);
       return null;
     } finally {
-      if (currentFileId === fileId) {
-        setIsLoadingPageCount(false);
-      }
+      setIsLoadingPageCount(false);
     }
   };
 
@@ -133,10 +111,9 @@ const OrganizePdfView: React.FC = () => {
     }
 
     // Get page count when files are uploaded
-    if (files.length > 0 && !isLoadingPageCount) {
+    if (files.length > 0 && !pageCount && !isLoadingPageCount) {
       const file = files[0].file;
-      const fileId = `${file.name}-${file.size}-${file.lastModified}`;
-      getPageCount(file, fileId);
+      getPageCount(file);
     }
 
     return null;
@@ -148,10 +125,9 @@ const OrganizePdfView: React.FC = () => {
     }
 
     const file = files[0].file;
-    const fileId = `${file.name}-${file.size}-${file.lastModified}`;
     
     // Get page count for validation
-    const totalPages = await getPageCount(file, fileId);
+    const totalPages = await getPageCount(file);
     if (!totalPages) {
       throw new Error('Could not determine PDF page count');
     }
@@ -209,7 +185,6 @@ const OrganizePdfView: React.FC = () => {
     // Reset all state to initial values
     setPageCount(null);
     setIsLoadingPageCount(false);
-    setCurrentFileId('');
     setPageOperations({
       pageOrder: '',
       rotatePages: '',
