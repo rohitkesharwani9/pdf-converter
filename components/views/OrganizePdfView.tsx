@@ -14,6 +14,7 @@ interface PageValidationErrors {
 const OrganizePdfView: React.FC = () => {
   const [pageCount, setPageCount] = useState<number | null>(null);
   const [isLoadingPageCount, setIsLoadingPageCount] = useState(false);
+  const [lastProcessedFile, setLastProcessedFile] = useState<string>('');
   const [validationErrors, setValidationErrors] = useState<PageValidationErrors>({});
   const [pageOperations, setPageOperations] = useState({
     pageOrder: '',
@@ -23,6 +24,19 @@ const OrganizePdfView: React.FC = () => {
   const [resetKey, setResetKey] = useState(0);
 
   const getPageCount = async (file: File) => {
+    const fileKey = `${file.name}-${file.size}-${file.lastModified}`;
+    
+    // Reset state for new file
+    setPageCount(null);
+    setPageOperations({
+      pageOrder: '',
+      rotatePages: '',
+      deletePages: ''
+    });
+    setValidationErrors({});
+    setResetKey(prev => prev + 1);
+    setLastProcessedFile(fileKey);
+    
     setIsLoadingPageCount(true);
     try {
       const formData = new FormData();
@@ -111,9 +125,14 @@ const OrganizePdfView: React.FC = () => {
     }
 
     // Get page count when files are uploaded
-    if (files.length > 0 && !pageCount && !isLoadingPageCount) {
+    if (files.length > 0 && !isLoadingPageCount) {
       const file = files[0].file;
-      getPageCount(file);
+      const fileKey = `${file.name}-${file.size}-${file.lastModified}`;
+      
+      // Only process if this is a different file
+      if (lastProcessedFile !== fileKey) {
+        getPageCount(file);
+      }
     }
 
     return null;
@@ -185,6 +204,7 @@ const OrganizePdfView: React.FC = () => {
     // Reset all state to initial values
     setPageCount(null);
     setIsLoadingPageCount(false);
+    setLastProcessedFile('');
     setPageOperations({
       pageOrder: '',
       rotatePages: '',
