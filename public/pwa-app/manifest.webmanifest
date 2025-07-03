@@ -1,0 +1,142 @@
+{
+  "name": "PDF Converter Pro+",
+  "short_name": "PDF Converter Pro+",
+  "start_url": "https://pdf.coderobo.org/",
+  "display": "standalone",
+  "background_color": "#05fcc5",
+  "lang": "en",
+  "scope": "https://pdf.coderobo.org/",
+  "id": "https://pdf.coderobo.org/",
+  "description": "PDF Converter Pro+ is a tool that allows you to convert PDF files to Excel, Word, PowerPoint, and more.",
+  "screenshots": [
+    {
+      "src": "https://pdf.coderobo.org/pwa-app/screenshots/desktop1.png",
+      "sizes": "1920x1080",
+      "type": "image/jpg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://pdf.coderobo.org/pwa-app/screenshots/mobile1.png",
+      "sizes": "1080x1920",
+      "type": "image/jpg",
+      "form_factor": "narrow"
+    }
+  ],
+  "dir": "ltr",
+  "display_override": [
+    "window-controls-overlay"
+  ],
+  "orientation": "portrait",
+  "theme_color": "#05fcc5",
+  "user_preferences": {
+    "color_scheme": {
+      "dark": {
+        "theme_color": "#05fcc5",
+        "background_color": "#333333"
+      },
+      "light": {
+        "theme_color": "#05fcc5",
+        "background_color": "#FFFFFF"
+      }
+    }
+  },
+  "icons": [
+    {
+      "src": "https://pdf.coderobo.org/pwa-app/512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "https://pdf.coderobo.org/pwa-app/256.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any"
+    },
+    {
+      "src": "https://pdf.coderobo.org/pwa-app/192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "https://pdf.coderobo.org/pwa-app/app-maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": [
+    "tools",
+    "utilities",
+    "education"
+  ],
+  "file_handlers": [
+    {
+      "action": "https://pdf.coderobo.org/",
+      "accept": {
+        "image/*": [
+          ".jpg",
+          ".jpeg",
+          ".png",
+          ".webp"
+        ]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "https://pdf.coderobo.org/share-target/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "image",
+          "accept": [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+          ]
+        }
+      ]
+    }
+  },
+  "iarc_rating_id": "39d78758-59f2-429e-92ab-ad11d61feafe",
+  "related_applications": [
+    {
+      "platform": "windows",
+      "url": "https://pdf.coderobo.org/pwa-app/manifest.webmanifest",
+      "display_name": "Code Robo Apps"
+    }
+  ],
+  "prefer_related_applications": true,
+  "mswindows_store_tags": [
+    "PDF Converter",
+    "PDF to Excel",
+    "PDF to Word",
+    "PDF to PowerPoint",
+    "PDF to Image",
+    "Word To PDF",
+    "Excel To PDF",
+    "PowerPoint To PDF",
+    "Image To PDF",
+    "RTF To PDF",
+    "HTML To PDF",
+    "CSV To PDF",
+    "HTML To PDF",
+    "SVG To PDF",
+    "TXT To PDF"
+  ],
+  "shortcuts": [
+      {
+        "name": "Convert PDF To Word",
+        "url": "/",
+        "description": "Start Converting PDF To Word"
+      },
+      {
+        "name": "Convert PDF To Excel",
+        "url": "/",
+        "description": "Start Converting PDF To Excel"
+      }
+    ]
+}

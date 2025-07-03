@@ -4,80 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PDF Converter Pro+</title>
-  <meta name="theme-color" content="#05fcc5">
-  <meta name="description" content="PDF Converter Pro+ is a tool that allows you to convert PDF files to Excel, Word, PowerPoint, and more.">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q6S926GZYM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-Q6S926GZYM');
-</script>
-
-<!-- pwa app import start -->
-<link rel="manifest" href="./pwa-app/manifest.webmanifest">
-<script src="./pwa-app/install.js"></script>
-<script src="./pwa-app/main.js"></script>
-<script>
-  if (typeof navigator.serviceWorker !== 'undefined') {
-    navigator.serviceWorker.register('./pwa-app/sw.js')
-  }
-</script>
-<!-- pwa app import close -->
-
-
-
-<!--check online and offline code start-->
-<script>
-    // Function to show the offline alert
-    function showOfflineAlert() {
-        const alertBox = document.createElement("div");
-        alertBox.id = "offlineAlert";
-        alertBox.style.position = "fixed";
-        alertBox.style.top = "50%";
-        alertBox.style.left = "50%";
-        alertBox.style.transform = "translate(-50%, -50%)";
-        alertBox.style.backgroundColor = "#f8d7da";
-        alertBox.style.color = "#721c24";
-        alertBox.style.padding = "20px";
-        alertBox.style.border = "1px solid #f5c6cb";
-        alertBox.style.borderRadius = "8px";
-        alertBox.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
-        alertBox.style.textAlign = "center";
-        alertBox.style.zIndex = "10000";
-        alertBox.innerHTML = `
-            <h2 style="margin: 0; font-size: 18px;">You are not connected to the internet</h2>
-            <p style="margin: 10px 0;">This app requires an active internet connection. Please connect to the internet.</p>
-            <button onclick="closeOfflineAlert()" style="padding: 10px 20px; background-color: #721c24; color: white; border: none; border-radius: 4px; cursor: pointer;">Okay</button>
-            
-        `;
-        document.body.appendChild(alertBox);
-    }
-
-    // Function to close the offline alert
-    function closeOfflineAlert() {
-        const alertBox = document.getElementById("offlineAlert");
-        if (alertBox) {
-            alertBox.remove();
-        }
-    }
-
-    // Detect offline and show alert
-    window.addEventListener("offline", showOfflineAlert);
-
-    // Detect online and remove alert if it's visible
-    window.addEventListener("online", closeOfflineAlert);
-
-    // Check connectivity on load
-    if (!navigator.onLine) {
-        showOfflineAlert();
-    }
-</script>
- <!--check online and offline code end-->
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2305974348753248" crossorigin="anonymous"></script>
   <script>
@@ -383,29 +309,7 @@
     <div class="loading-text">Loading your PDF tools...</div>
   </div>
   
-  <div class="custom-title-bar">
-    <span class="app-title"><b>PDF Converter Pro+</b></span>
-</div>
-<style>
-    .custom-title-bar {
-        -webkit-app-region: drag; /* Makes the area draggable */
-        background-color: #05fcc5; /* Set the background color */
-        color: #333; /* Text color */
-        height: 33px;
-        display: flex;
-        align-items: center;
-        padding-left: 10px;
-        font-size: 14px;
-        user-select: none;
-        position: fixed; /* Sticks to the top at all times */
-        top: 0; /* Ensures it stays at the top of the viewport */
-        left: 0; /* Aligns to the left of the viewport */
-        width: 100%; /* Spans the full width of the viewport */
-        z-index: 1000; /* Ensures it stays above other elements */
-    }
-</style>
-
-  <div id="root" style="margin-top: 33px;"></div>
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
   
   <script>
