@@ -86,20 +86,18 @@ const EditMetadataPdfView: React.FC<EditMetadataPdfViewProps> = ({ task }) => {
       const arrayBuffer = await file.file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       
-      // Update metadata
-      if (metadataSettings.title.trim() !== '') {
-        pdfDoc.setTitle(metadataSettings.title.trim());
-      }
-      if (metadataSettings.author.trim() !== '') {
-        pdfDoc.setAuthor(metadataSettings.author.trim());
-      }
-      if (metadataSettings.subject.trim() !== '') {
-        pdfDoc.setSubject(metadataSettings.subject.trim());
-      }
+      // Update metadata - explicitly set or clear each field
+      pdfDoc.setTitle(metadataSettings.title.trim());
+      pdfDoc.setAuthor(metadataSettings.author.trim());
+      pdfDoc.setSubject(metadataSettings.subject.trim());
+      
       if (metadataSettings.keywords.trim() !== '') {
         // Split keywords by comma and trim whitespace
         const keywordsArray = metadataSettings.keywords.split(',').map(k => k.trim()).filter(k => k.length > 0);
         pdfDoc.setKeywords(keywordsArray);
+      } else {
+        // Clear keywords if empty
+        pdfDoc.setKeywords([]);
       }
       
       // Save the modified PDF
