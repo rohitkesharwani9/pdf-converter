@@ -182,13 +182,13 @@ const EditMetadataPdfView: React.FC<EditMetadataPdfViewProps> = ({ task }) => {
       customValidation={customValidation}
       onClearAll={handleClearAll}
     >
-      <div className="mt-4 md:mt-6 p-4 md:p-6 bg-gray-50 dark:bg-neutral-800 rounded-lg">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-3 sm:space-y-0">
-          <h3 className="text-base md:text-lg font-semibold text-neutral-800 dark:text-neutral-100 flex items-center">
-            <Edit3 className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+      <div className="mt-6 p-6 bg-gray-50 dark:bg-neutral-800 rounded-lg">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-100 flex items-center">
+            <Edit3 className="w-5 h-5 mr-2" />
             PDF Metadata Editor
           </h3>
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+          <div className="flex space-x-2">
             {isLoadingMetadata && (
               <div className="flex items-center px-3 py-2 text-sm bg-blue-500 text-white rounded-lg">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -210,7 +210,7 @@ const EditMetadataPdfView: React.FC<EditMetadataPdfViewProps> = ({ task }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Title */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 flex items-center">
@@ -293,28 +293,28 @@ const EditMetadataPdfView: React.FC<EditMetadataPdfViewProps> = ({ task }) => {
         </div>
 
         {/* Metadata Preview */}
-        <div className="mt-4 md:mt-6 p-3 md:p-4 bg-white dark:bg-neutral-900 border-2 border-neutral-300 dark:border-neutral-600 rounded-lg">
-          <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 md:mb-3">Metadata Preview</h4>
-          <div className="space-y-1 md:space-y-2 text-sm">
-            <div className="flex flex-col sm:flex-row">
+        <div className="mt-6 p-4 bg-white dark:bg-neutral-900 border-2 border-neutral-300 dark:border-neutral-600 rounded-lg">
+          <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">Metadata Preview</h4>
+          <div className="space-y-2 text-sm">
+            <div className="flex">
               <span className="font-medium text-neutral-600 dark:text-neutral-400 w-20">Title:</span>
               <span className="text-neutral-800 dark:text-neutral-200">
                 {metadataSettings.title || 'Not set'}
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row">
+            <div className="flex">
               <span className="font-medium text-neutral-600 dark:text-neutral-400 w-20">Author:</span>
               <span className="text-neutral-800 dark:text-neutral-200">
                 {metadataSettings.author || 'Not set'}
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row">
+            <div className="flex">
               <span className="font-medium text-neutral-600 dark:text-neutral-400 w-20">Subject:</span>
               <span className="text-neutral-800 dark:text-neutral-200">
                 {metadataSettings.subject || 'Not set'}
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row">
+            <div className="flex">
               <span className="font-medium text-neutral-600 dark:text-neutral-400 w-20">Keywords:</span>
               <span className="text-neutral-800 dark:text-neutral-200">
                 {metadataSettings.keywords || 'Not set'}
@@ -324,7 +324,7 @@ const EditMetadataPdfView: React.FC<EditMetadataPdfViewProps> = ({ task }) => {
         </div>
 
         {/* Instructions */}
-        <div className="mt-3 md:mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <p className="text-sm text-blue-800 dark:text-blue-200">
             <strong>Note:</strong> Leave fields empty to remove existing metadata. The PDF content remains unchanged - only the metadata properties are modified.
           </p>

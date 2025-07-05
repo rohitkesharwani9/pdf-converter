@@ -115,7 +115,7 @@ export const ALL_CONVERSION_TASKS: ConversionTask[] = [
         'application/msword', 
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ],
-    accept: '.doc, .docx, msword',
+    accept: '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     requiresFileUpload: true,
     allowMultipleFiles: true,
     options: wordToPdfOptions,

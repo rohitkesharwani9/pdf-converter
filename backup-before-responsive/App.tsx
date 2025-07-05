@@ -9,7 +9,6 @@ import MergePdfView from './components/views/MergePdfView';
 import PasswordPdfView from './components/views/PasswordPdfView';
 import PlaceholderView from './components/views/PlaceholderView';
 import { ThemeContext } from './contexts/ThemeContext'; 
-import { Menu, X } from 'lucide-react'; // Add icons for mobile menu
 
 // Import other view components
 import WordToPdfView from './components/views/WordToPdfView';
@@ -71,14 +70,12 @@ const App: React.FC = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [downloadFilename, setDownloadFilename] = useState<string>('');
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Mobile sidebar state
   const themeContext = React.useContext(ThemeContext);
   const darkMode = themeContext?.darkMode ?? false;
 
   const handleTaskSelect = useCallback((taskId: ConversionType) => {
     const task = ALL_CONVERSION_TASKS.find(t => t.id === taskId) || null;
     setActiveTask(task);
-    setSidebarOpen(false); // Close sidebar on mobile when task is selected
     // Reset state when switching tasks
     setUploadedFile(null);
     setDownloadUrl(null);
@@ -212,34 +209,18 @@ const App: React.FC = () => {
 
   return (
     <div className={`flex flex-col h-screen font-sans ${darkMode ? 'dark' : ''}`}>
-      <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="flex flex-1 overflow-hidden relative">
-        {/* Mobile sidebar overlay */}
-        {sidebarOpen && (
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-        
-        {/* Sidebar */}
-        <div className={`
-          fixed lg:static inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        `}>
-          <Sidebar onTaskSelect={handleTaskSelect} activeTaskId={activeTask?.id || null} />
-        </div>
-        
-        {/* Main content */}
-        <main className="flex-1 p-0 md:p-6 overflow-y-auto bg-neutral-50 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 w-full">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar onTaskSelect={handleTaskSelect} activeTaskId={activeTask?.id || null} />
+        <main className="flex-1 p-0 md:p-6 overflow-y-auto bg-neutral-50 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
           {conversionError && (
-            <div className="p-4 mb-4 bg-red-100 border border-red-300 text-red-700 rounded text-center font-semibold mx-4 mt-4 md:mx-0">
+            <div className="p-4 mb-4 bg-red-100 border border-red-300 text-red-700 rounded text-center font-semibold">
               {conversionError}
             </div>
           )}
           {/* Apply p-0 for IMAGE_TO_PDF to allow MUI component to control its padding, else p-6 */}
           {activeTask?.id === ConversionType.IMAGE_TO_PDF ? renderActiveView() : (
-            <div className="p-4 md:p-6 h-full"> {/* Ensure other views still have padding */}
+            <div className="p-6 h-full"> {/* Ensure other views still have padding */}
               {renderActiveView()}
             </div>
           )}

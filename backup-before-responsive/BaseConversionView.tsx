@@ -194,13 +194,13 @@ const BaseConversionView: React.FC<BaseConversionViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
-      <div className="p-4 md:p-6 bg-white dark:bg-neutral-900 shadow-xl rounded-lg">
-        <div className="flex items-center space-x-2 md:space-x-3 mb-3 md:mb-4">
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="p-6 bg-white dark:bg-neutral-900 shadow-xl rounded-lg">
+        <div className="flex items-center space-x-3 mb-4">
           <span className="text-primary dark:text-secondary-light">{task.icon}</span>
-          <h2 className="text-xl md:text-2xl font-semibold text-neutral-800 dark:text-neutral-100">{task.name}</h2>
+          <h2 className="text-2xl font-semibold text-neutral-800 dark:text-neutral-100">{task.name}</h2>
         </div>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4 md:mb-6">{task.description}</p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">{task.description}</p>
 
         {task.requiresFileUpload && !hideDefaultFileUpload && (
           <FileUpload
@@ -224,12 +224,12 @@ const BaseConversionView: React.FC<BaseConversionViewProps> = ({
 
         {error && (
           <div className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-md text-red-700 dark:text-red-300 flex items-center space-x-2">
-            <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
-            <span className="text-sm">{error}</span>
+            <AlertTriangle className="w-5 h-5" />
+            <span>{error}</span>
           </div>
         )}
 
-        <div className="mt-6 md:mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+        <div className="mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <Button
             onClick={handleConvert}
             isLoading={isConverting}
@@ -252,20 +252,20 @@ const BaseConversionView: React.FC<BaseConversionViewProps> = ({
         </div>
 
         {isConverting && conversionProgress < 100 && (
-          <div className="mt-4 md:mt-6">
+          <div className="mt-6">
             <ProgressBar progress={conversionProgress} label="Conversion in progress..."/>
           </div>
         )}
 
         {processedFiles.length > 0 && !isConverting && (
-          <div className="mt-6 md:mt-8 p-4 md:p-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg">
-            <div className="flex items-center space-x-2 mb-3 md:mb-4">
-                <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600 dark:text-green-400" />
-                <h3 className="text-base md:text-lg font-semibold text-green-800 dark:text-green-200">Conversion Successful!</h3>
+          <div className="mt-8 p-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg">
+            <div className="flex items-center space-x-2 mb-4">
+                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                <h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Conversion Successful!</h3>
             </div>
             <ul className="space-y-2">
               {processedFiles.map((file) => (
-                <li key={file.id} className="p-3 bg-white dark:bg-neutral-800 rounded-md shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                <li key={file.id} className="p-3 bg-white dark:bg-neutral-800 rounded-md shadow-sm flex items-center justify-between">
                   <span className="text-sm text-neutral-700 dark:text-neutral-300 truncate" title={file.name}>
                     {file.name} ({file.type}, {file.size})
                   </span>
@@ -274,13 +274,11 @@ const BaseConversionView: React.FC<BaseConversionViewProps> = ({
                       href={file.downloadUrl}
                       download={file.name}
                       style={{ textDecoration: 'none' }}
-                      className="self-start sm:self-auto"
                     >
                       <Button
                         variant="ghost"
                         size="sm"
                         leftIcon={<Download className="w-4 h-4" />}
-                        className="w-full sm:w-auto"
                       >
                         Download
                       </Button>
@@ -291,7 +289,6 @@ const BaseConversionView: React.FC<BaseConversionViewProps> = ({
                       size="sm"
                       onClick={() => handleSimulatedDownload(file)}
                       leftIcon={<Download className="w-4 h-4" />}
-                      className="w-full sm:w-auto self-start sm:self-auto"
                     >
                       Download
                     </Button>
@@ -307,7 +304,7 @@ const BaseConversionView: React.FC<BaseConversionViewProps> = ({
           <AdSense 
             adSlot="6480016001" 
             adFormat="auto" 
-            className="mt-6 md:mt-8"
+            className="mt-8"
           />
         )}
       </div>

@@ -120,9 +120,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
   };
 
   return (
-    <div className="space-y-3 md:space-y-4">
+    <div className="space-y-4">
       <div
-        className={`w-full p-6 md:p-8 border-2 border-dashed rounded-lg text-center cursor-pointer
+        className={`w-full p-8 border-2 border-dashed rounded-lg text-center cursor-pointer
                     transition-colors duration-200 ease-in-out
                     ${isDragging 
                       ? 'border-primary bg-primary/10 dark:bg-primary-dark/20' 
@@ -142,7 +142,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           onChange={handleFileSelect}
           className="hidden"
         />
-        <UploadCloud className="mx-auto h-8 w-8 md:h-12 md:w-12 text-neutral-400 dark:text-neutral-500 mb-2 md:mb-3" />
+        <UploadCloud className="mx-auto h-12 w-12 text-neutral-400 dark:text-neutral-500 mb-3" />
         <p className="text-neutral-600 dark:text-neutral-400 text-sm">{label}</p>
         <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
             {accept !== '*' ? `Accepted: ${accept}. ` : ''}Max size: {maxFileSizeMB}MB.
@@ -153,26 +153,24 @@ const FileUpload: React.FC<FileUploadProps> = ({
       {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
 
       {uploadedFiles.length > 0 && !hideFileList && (
-        <div className="space-y-2 pt-3 md:pt-4">
-          <h4 className="text-sm md:text-md font-semibold text-neutral-700 dark:text-neutral-300">Selected Files:</h4>
+        <div className="space-y-2 pt-4">
+          <h4 className="text-md font-semibold text-neutral-700 dark:text-neutral-300">Selected Files:</h4>
           <ul className="divide-y divide-neutral-200 dark:divide-neutral-700 rounded-md border border-neutral-200 dark:border-neutral-700">
             {uploadedFiles.map((uploadedFile) => (
               <li key={uploadedFile.id} className="p-3 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-700/30">
-                <div className="flex items-center space-x-2 md:space-x-3 min-w-0 flex-1">
+                <div className="flex items-center space-x-3">
                   {uploadedFile.previewUrl && (
-                    <img src={uploadedFile.previewUrl} alt={uploadedFile.file.name} className="w-8 h-8 md:w-10 md:h-10 object-cover rounded flex-shrink-0" />
+                    <img src={uploadedFile.previewUrl} alt={uploadedFile.file.name} className="w-10 h-10 object-cover rounded" />
                   )}
-                  <div className="min-w-0 flex-1">
-                    <span className="text-sm text-neutral-700 dark:text-neutral-300 truncate block" title={uploadedFile.file.name}>
-                      {uploadedFile.file.name}
-                    </span>
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                      ({(uploadedFile.file.size / 1024 / 1024).toFixed(2)} MB)
-                    </span>
-                  </div>
+                  <span className="text-sm text-neutral-700 dark:text-neutral-300 truncate max-w-xs" title={uploadedFile.file.name}>
+                    {uploadedFile.file.name}
+                  </span>
+                  <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                    ({(uploadedFile.file.size / 1024 / 1024).toFixed(2)} MB)
+                  </span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(uploadedFile.id)} aria-label={`Remove ${uploadedFile.file.name}`} className="flex-shrink-0">
-                  <XCircle className="w-4 h-4 md:w-5 md:h-5 text-red-500 hover:text-red-700" />
+                <Button variant="ghost" size="sm" onClick={() => handleRemoveFile(uploadedFile.id)} aria-label={`Remove ${uploadedFile.file.name}`}>
+                  <XCircle className="w-5 h-5 text-red-500 hover:text-red-700" />
                 </Button>
               </li>
             ))}

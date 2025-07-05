@@ -110,9 +110,9 @@ const ConversionOptionsPanel: React.FC<ConversionOptionsPanelProps> = ({ options
   const isTextBasedConversion = optionValues.conversionType === 'text';
 
   return (
-    <div className="mt-4 md:mt-6 p-4 md:p-6 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg shadow">
-      <h3 className="text-base md:text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-3 md:mb-4">Conversion Options</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+    <div className="mt-6 p-6 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg shadow">
+      <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-4">Conversion Options</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {options.map((option) => (
           <div key={option.id} className={option.type === 'checkbox' ? 'md:col-span-2 flex items-center' : ''}>
             {option.type !== 'checkbox' && (
