@@ -33,11 +33,18 @@ const InputField: React.FC<{option: ConversionOption, value: any, onChange: (val
           <input
             id={option.id}
             type="checkbox"
-            checked={value ?? option.defaultValue ?? false}
+            checked={option.id === 'embedFonts' ? true : (value ?? option.defaultValue ?? false)}
             onChange={(e) => onChange(e.target.checked)}
-            className="h-4 w-4 text-primary border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary"
+            disabled={option.id === 'embedFonts'}
+            className={`h-4 w-4 text-primary border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary ${
+              option.id === 'embedFonts' ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           />
-           <label htmlFor={option.id} className="ml-2 block text-sm text-neutral-700 dark:text-neutral-300">
+           <label htmlFor={option.id} className={`ml-2 block text-sm ${
+             option.id === 'embedFonts' 
+               ? 'text-neutral-500 dark:text-neutral-400' 
+               : 'text-neutral-700 dark:text-neutral-300'
+           }`}>
             {option.label}
           </label>
         </div>

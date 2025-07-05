@@ -137,18 +137,6 @@ const OCRPdfView: React.FC<OCRPdfViewProps> = ({ task }) => {
               className="w-full px-3 py-2 border-2 border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-neutral-700 dark:text-neutral-100"
             >
               <option value="eng">English</option>
-              <option value="spa">Spanish</option>
-              <option value="fra">French</option>
-              <option value="deu">German</option>
-              <option value="ita">Italian</option>
-              <option value="por">Portuguese</option>
-              <option value="rus">Russian</option>
-              <option value="chi_sim">Chinese (Simplified)</option>
-              <option value="chi_tra">Chinese (Traditional)</option>
-              <option value="jpn">Japanese</option>
-              <option value="kor">Korean</option>
-              <option value="ara">Arabic</option>
-              <option value="hin">Hindi</option>
             </select>
           </div>
 
