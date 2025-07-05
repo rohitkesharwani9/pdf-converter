@@ -356,7 +356,7 @@ app.post('/convert/epub-to-pdf', upload.single('file'), async (req, res) => {
     console.log('[EPUB2PDF] Starting Calibre conversion...');
     const calibreProcess = execFile(
       'ebook-convert',
-      [renamedInputPath, outputPdf],
+      ['--no-sandbox', renamedInputPath, outputPdf],
       { timeout: 300000 }, // 5 minutes timeout
       async (error, stdout, stderr) => {
         try {
