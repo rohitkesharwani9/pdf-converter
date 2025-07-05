@@ -357,7 +357,6 @@ app.post('/convert/epub-to-pdf', upload.single('file'), async (req, res) => {
     
     // Use spawn for better control over the process
     const calibreProcess = spawn('ebook-convert', [
-      '--no-sandbox',
       renamedInputPath,
       outputPdf
     ], {
