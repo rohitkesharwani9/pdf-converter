@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ConversionTask, UploadedFile, ProcessedFile } from '../../types';
 import BaseConversionView from './BaseConversionView';
-import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Type, Download, AlertTriangle, CheckCircle, Trash2 } from 'lucide-react';
+import { Download, AlertTriangle, CheckCircle, Trash2 } from 'lucide-react';
 import Button from '../Button';
 import ProgressBar from '../ProgressBar';
 
@@ -11,9 +11,6 @@ interface TextToPdfViewProps {
 
 const TextToPdfView: React.FC<TextToPdfViewProps> = ({ task }) => {
   const [textContent, setTextContent] = useState('');
-  const [fontSize, setFontSize] = useState(12);
-  const [fontFamily, setFontFamily] = useState('Arial');
-  const [textAlign, setTextAlign] = useState<'left' | 'center' | 'right'>('left');
   
   // Separate states for text input conversion
   const [isConvertingText, setIsConvertingText] = useState(false);
@@ -159,60 +156,6 @@ const TextToPdfView: React.FC<TextToPdfViewProps> = ({ task }) => {
     }
   };
 
-  const applyFormatting = (command: string, value?: string) => {
-    if (!textAreaRef.current) return;
-
-    const textarea = textAreaRef.current;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
-
-    let newText = '';
-    switch (command) {
-      case 'bold':
-        newText = `**${selectedText}**`;
-        break;
-      case 'italic':
-        newText = `*${selectedText}*`;
-        break;
-      case 'underline':
-        newText = `_${selectedText}_`;
-        break;
-      case 'list':
-        newText = selectedText.split('\n').map(line => `• ${line}`).join('\n');
-        break;
-      case 'numbered':
-        newText = selectedText.split('\n').map((line, index) => `${index + 1}. ${line}`).join('\n');
-        break;
-      case 'fontSize':
-        if (value) {
-          setFontSize(parseInt(value));
-        }
-        return;
-      case 'fontFamily':
-        if (value) {
-          setFontFamily(value);
-        }
-        return;
-      case 'align':
-        if (value) {
-          setTextAlign(value as 'left' | 'center' | 'right');
-        }
-        return;
-      default:
-        return;
-    }
-
-    const newValue = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
-    setTextContent(newValue);
-    
-    // Set cursor position after the inserted text
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + newText.length, start + newText.length);
-    }, 0);
-  };
-
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="p-6 bg-white dark:bg-neutral-900 shadow-xl rounded-lg">
@@ -231,103 +174,11 @@ const TextToPdfView: React.FC<TextToPdfViewProps> = ({ task }) => {
             📝 Enter or Paste Text
           </h3>
           
-          {/* Text Formatting Toolbar */}
-          <div className="flex flex-wrap items-center gap-2 mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <button
-              onClick={() => applyFormatting('bold')}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
-              title="Bold"
-            >
-              <Bold className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => applyFormatting('italic')}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
-              title="Italic"
-            >
-              <Italic className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => applyFormatting('underline')}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
-              title="Underline"
-            >
-              <Underline className="w-4 h-4" />
-            </button>
-            
-            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
-            
-            <button
-              onClick={() => applyFormatting('align', 'left')}
-              className={`p-2 rounded ${textAlign === 'left' ? 'bg-blue-200 dark:bg-blue-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-              title="Align Left"
-            >
-              <AlignLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => applyFormatting('align', 'center')}
-              className={`p-2 rounded ${textAlign === 'center' ? 'bg-blue-200 dark:bg-blue-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-              title="Align Center"
-            >
-              <AlignCenter className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => applyFormatting('align', 'right')}
-              className={`p-2 rounded ${textAlign === 'right' ? 'bg-blue-200 dark:bg-blue-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-              title="Align Right"
-            >
-              <AlignRight className="w-4 h-4" />
-            </button>
-            
-            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
-            
-            <button
-              onClick={() => applyFormatting('list')}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
-              title="Bullet List"
-            >
-              <List className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => applyFormatting('numbered')}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
-              title="Numbered List"
-            >
-              <ListOrdered className="w-4 h-4" />
-            </button>
-            
-            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
-            
-            <select
-              value={fontSize}
-              onChange={(e) => applyFormatting('fontSize', e.target.value)}
-              className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm"
-            >
-              <option value={8}>8px</option>
-              <option value={10}>10px</option>
-              <option value={12}>12px</option>
-              <option value={14}>14px</option>
-              <option value={16}>16px</option>
-              <option value={18}>18px</option>
-              <option value={20}>20px</option>
-              <option value={24}>24px</option>
-            </select>
-            
-            <select
-              value={fontFamily}
-              onChange={(e) => applyFormatting('fontFamily', e.target.value)}
-              className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-sm"
-            >
-              <option value="Arial">Arial</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Courier New">Courier New</option>
-              <option value="Georgia">Georgia</option>
-              <option value="Verdana">Verdana</option>
-            </select>
-            
+          {/* Simple Clear Text Button */}
+          <div className="flex justify-end mb-3">
             <button
               onClick={clearText}
-              className="ml-auto px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+              className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
             >
               Clear Text
             </button>
@@ -338,13 +189,8 @@ const TextToPdfView: React.FC<TextToPdfViewProps> = ({ task }) => {
             ref={textAreaRef}
             value={textContent}
             onChange={(e) => setTextContent(e.target.value)}
-            placeholder="Enter or paste your text here... You can use formatting options above to style your text."
+            placeholder="Enter or paste your text here..."
             className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-neutral-800 dark:text-neutral-200 resize-vertical"
-            style={{
-              fontSize: `${fontSize}px`,
-              fontFamily: fontFamily,
-              textAlign: textAlign
-            }}
           />
           
           <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
