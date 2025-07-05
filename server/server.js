@@ -16,6 +16,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 5001;
 
+console.log(`Starting PDF Converter backend on port ${port}`);
+console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+
 // Set server timeouts for long-running operations
 app.use((req, res, next) => {
   // Set timeout to 5 minutes for all requests
@@ -33,6 +36,33 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Track active conversions
+let activeConversions = 0;
+let completedConversions = 0;
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  // Quick health check - just verify the server is responding
+  // This doesn't interfere with ongoing conversions (Python/LibreOffice run in separate processes)
+  const healthData = {
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    conversions: {
+      active: activeConversions,
+      completed: completedConversions
+    },
+    processes: {
+      nodejs: 'running',
+      python: 'available',
+      libreoffice: 'available'
+    }
+  };
+  
+  res.status(200).json(healthData);
+});
 
 const upload = multer({ dest: 'uploads/' });
 const uploadsDir = 'uploads/';
@@ -2805,9 +2835,24 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`PDF Converter backend running on http://localhost:${port}`);
   console.log(`CORS origin: ${process.env.CORS_ORIGIN || 'default'}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
 }); 
 
 async function organizePdfPages(inputPath, outputPath, pageOperations) {
