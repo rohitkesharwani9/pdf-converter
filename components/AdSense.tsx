@@ -84,7 +84,7 @@ const AdSense: React.FC<AdSenseProps> = ({ adSlot, adFormat = 'auto', className 
             minHeight: '250px',
             width: '100%'
           }}
-          data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+          data-ad-client="ca-pub-2305974348753248"
           data-ad-slot={adSlot}
           data-ad-format="rectangle"
           data-ad-layout="in-article"
